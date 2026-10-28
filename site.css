@@ -91,6 +91,7 @@ a:hover { color: var(--harbour-hover); }
 .review .score { font-weight: 600; color: var(--critique); }
 .review blockquote { margin: 16px 0 0; font: 400 clamp(18px, 2vw, 21px)/1.6 var(--serif); }
 .review blockquote p + p { margin-top: 10px; }
+.review .note-staff { margin-top: 16px; padding: 10px 12px; border-radius: 6px; background: var(--paper); font-size: 14px; color: var(--muted); }
 .review cite { display: block; margin-top: 14px; font: italic 400 16px/1.4 var(--serif); color: var(--muted); }
 .reply { margin: -1px 0 0 clamp(16px, 4vw, 48px); background: var(--harbour-soft); border: 1px solid var(--line); border-radius: 0 0 8px 8px; padding: clamp(18px, 3vw, 28px); }
 .reply .label { font-size: 14px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
