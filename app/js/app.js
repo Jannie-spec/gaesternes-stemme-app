@@ -1,6 +1,6 @@
 import { api, configured } from './api.js';
 import { demo } from './demo.js';
-import { state, loadOrgData } from './state.js';
+import { state, loadOrgData, reloadQueue } from './state.js';
 import { html, mount, toast } from './ui.js';
 import { renderLogin } from './views/login.js';
 import { renderOnboarding } from './views/onboarding.js';
@@ -8,11 +8,13 @@ import { renderInbox } from './views/inbox.js';
 import { renderOverview } from './views/overview.js';
 import { renderSettings } from './views/settings.js';
 import { renderInvite } from './views/invite.js';
+import { renderAdmin } from './views/admin.js';
 
 const root = document.querySelector('#app');
 
 function route() {
-  const [, page = '', arg = ''] = location.hash.replace(/\?.*$/, '').split('/');
+  // #/indstillinger#team: sidste del er et afsnit på siden
+  const [, page = '', arg = ''] = location.hash.replace(/\?.*$/, '').replace(/^(#[^#]*)#.*$/, '$1').split('/');
   return { page, arg };
 }
 
@@ -20,7 +22,8 @@ function shell(active) {
   const a = state.access;
   const trial = a?.state === 'trial'
     ? html`<p class="trial">Prøveperiode: ${a.days_left} ${a.days_left === 1 ? 'dag' : 'dage'} tilbage.</p>`
-    : a?.state === 'expired' ? html`<p class="trial trial-over">Prøveperioden er slut. Anmeldelserne er gemt, men der kommer ikke nye svarforslag.</p>` : '';
+    : a?.state === 'expired' ? html`<p class="trial trial-over">Prøveperioden er slut. Anmeldelserne er gemt, men der kommer ikke nye svarforslag. <a href="#/indstillinger">Fortsæt med abonnement</a></p>`
+    : a?.state === 'past_due' ? html`<p class="trial trial-over">Den seneste betaling gik ikke igennem. <a href="#/indstillinger">Opdatér kortet</a></p>` : '';
   const demoBar = state.demo ? html`<div class="demo-bar"><span>Prøveversion med opdigtede data</span>
       <label>Se appen som <select id="demoRole">
         <option value="owner" ${state.role === 'owner' ? 'selected' : ''}>ejer</option>
@@ -31,7 +34,7 @@ function shell(active) {
   return html`${demoBar}<header class="top">
       <a class="mark" href="#/">Ekkoly</a>
       <span class="org">${state.org?.name}</span>
-      <nav aria-label="Hovedmenu">${link('#/', 'I dag', 'inbox')}${link('#/overblik', 'Overblik', 'overview')}${link('#/indstillinger', 'Indstillinger', 'settings')}</nav>
+      <nav aria-label="Hovedmenu">${link('#/', 'I dag', 'inbox')}${link('#/overblik', 'Overblik', 'overview')}${link('#/indstillinger', 'Indstillinger', 'settings')}${state.isAdmin ? link('#/admin', 'Admin', 'admin') : ''}</nav>
       <button class="link quiet" id="signOut" type="button">${state.demo ? 'Luk prøveversionen' : 'Log ud'}</button>
     </header>${trial}<main id="view"></main>`;
 }
@@ -46,7 +49,7 @@ async function render() {
   if (!state.user) return renderLogin(root, {});
   if (!state.org) return renderOnboarding(root, start);
 
-  const active = page === 'overblik' ? 'overview' : page === 'indstillinger' ? 'settings' : 'inbox';
+  const active = page === 'overblik' ? 'overview' : page === 'indstillinger' ? 'settings' : page === 'admin' && state.isAdmin ? 'admin' : 'inbox';
   mount(root, shell(active));
   root.querySelector('#signOut').addEventListener('click', async () => {
     if (state.demo) { location.href = location.pathname; return; }
@@ -56,7 +59,8 @@ async function render() {
   const view = root.querySelector('#view');
   if (active === 'overview') return renderOverview(view);
   if (active === 'settings') return renderSettings(view, render);
-  return renderInbox(view, page === 'anmeldelse' ? arg : null);
+  if (active === 'admin') return renderAdmin(view);
+  return renderInbox(view, page === 'anmeldelse' ? arg : page === 'ny' ? 'ny' : null);
 }
 
 /** Henter bruger, organisation og data, og tegner siden. */
@@ -67,6 +71,7 @@ export async function start() {
     if (state.user) {
       const { user, list } = await state.api.memberships();
       state.user = user;
+      state.isAdmin = await state.api.isAdmin().catch(() => false);
       const chosen = list.find((m) => m.org.id === localStorage.getItem('gs-org')) ?? list[0];
       state.org = chosen?.org ?? null;
       state.role = chosen?.role ?? null;
@@ -80,6 +85,19 @@ export async function start() {
 }
 
 window.addEventListener('hashchange', render);
+
+// Medarbejderen har trykket "Svaret er sendt" i Ekkoly-knappens panel på platformen
+window.addEventListener('message', async (e) => {
+  if (e.source !== window || e.data?.source !== 'ekkoly-ext' || e.data.type !== 'reply-done') return;
+  const text = state.extPending?.[e.data.id];
+  if (!text || !state.api) return;
+  delete state.extPending[e.data.id];
+  try {
+    await state.api.markPosted(e.data.id, text);
+    await reloadQueue();
+    render();
+  } catch { /* anmeldelsen kan markeres i hånden */ }
+});
 
 const params = new URLSearchParams(location.search);
 if (params.has('demo') || !configured()) {

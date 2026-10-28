@@ -63,6 +63,12 @@ export const api = {
     ]);
     return { review, notes, drafts };
   },
+  async addReview(orgId, r) {
+    const c = await client();
+    const { data, error } = await c.from('reviews').insert({ org_id: orgId, source: 'manual', ...r }).select('id').single();
+    if (error) throw new Error(/duplicate|unique/i.test(error.message) ? 'Den anmeldelse er allerede sat ind.' : error.message);
+    return data;
+  },
   newDraft: (reviewId) => fn('draft-reply', { review_id: reviewId }),
   async ownDraft(orgId, reviewId, body) {
     const c = await client();
@@ -72,6 +78,7 @@ export const api = {
   async approve(draftId, body) { const c = await client(); return must(await c.rpc('approve_reply', { p_draft: draftId, p_body: body })); },
   async markPosted(reviewId, body) { const c = await client(); return must(await c.rpc('mark_reply_posted', { p_review: reviewId, p_body: body })); },
   postToPlatform: (reviewId) => fn('post-reply', { review_id: reviewId }),
+  recheckReview: (reviewId) => fn('analyze', { action: 'one', review_id: reviewId }),
   async setHold(reviewId, hold, note) { const c = await client(); return must(await c.rpc('set_removal_hold', { p_review: reviewId, p_hold: hold, p_note: note })); },
   async addNote(orgId, reviewId, body) {
     const c = await client();
@@ -95,6 +102,27 @@ export const api = {
   finishGoogle: (code, oauthState) => fn('google-oauth', { action: 'finish', code, state: oauthState }),
   async linkGoogle(propertyId, location, title) { const c = await client(); return must(await c.rpc('link_google_location', { p_property: propertyId, p_location: location, p_title: title })); },
   syncGoogle: (orgId) => fn('google-sync', { org_id: orgId }),
+
+  async competitors(orgId) {
+    const c = await client();
+    const [list, snaps] = await Promise.all([
+      c.from('competitors').select('*').eq('org_id', orgId).order('created_at').then(must),
+      c.from('competitor_snapshots').select('competitor_id, rating, review_count, observed_at').eq('org_id', orgId).order('observed_at').then(must),
+    ]);
+    return list.map((x) => ({ ...x, snapshots: snaps.filter((s) => s.competitor_id === x.id) }));
+  },
+  async searchCompetitors(orgId, query) { return (await fn('competitors', { action: 'search', org_id: orgId, query })).results; },
+  addCompetitor: (orgId, propertyId, placeId) => fn('competitors', { action: 'add', org_id: orgId, property_id: propertyId, place_id: placeId }),
+  async removeCompetitor(id) { const c = await client(); must(await c.from('competitors').delete().eq('id', id)); },
+  async billing(orgId) { const c = await client(); return must(await c.rpc('org_billing', { p_org: orgId }))?.[0] ?? null; },
+  async startCheckout(orgId) { return (await fn('billing', { org_id: orgId, action: 'checkout' })).url; },
+  async openPortal(orgId) { return (await fn('billing', { org_id: orgId, action: 'portal' })).url; },
+  syncPlaces: (orgId) => fn('billing', { org_id: orgId, action: 'sync' }),
+
+  async isAdmin() { const c = await client(); return Boolean(must(await c.rpc('is_platform_admin'))); },
+  async adminOrgs() { const c = await client(); return must(await c.rpc('admin_orgs')); },
+  async adminExtendTrial(orgId, days) { const c = await client(); return must(await c.rpc('admin_extend_trial', { p_org: orgId, p_days: days })); },
+  async adminSetPilot(orgId, on) { const c = await client(); return must(await c.rpc('admin_set_pilot', { p_org: orgId, p_on: on })); },
 
   async snapshots(orgId) { const c = await client(); return must(await c.from('score_snapshots').select('*').eq('org_id', orgId).order('observed_at')); },
   async inbound(orgId) { const c = await client(); return must(await c.from('inbound_emails').select('id, from_address, subject, received_at, status, platform, error').eq('org_id', orgId).order('received_at', { ascending: false }).limit(10)); },

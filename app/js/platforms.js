@@ -18,9 +18,28 @@ export const PLATFORMS = {
 
 export const platformName = (p) => PLATFORMS[p]?.name ?? p;
 
-/** Hvor medarbejderen svarer på denne anmeldelse. */
+// Domæner, som et link fra en anmeldelses-mail skal høre til, før vi åbner det.
+// Så kan en falsk mail ikke sende medarbejderen videre til en anden side.
+const DOMAINS = {
+  google: ['google.com', 'google.dk'], facebook: ['facebook.com'], trustpilot: ['trustpilot.com'], holidaycheck: ['holidaycheck.de', 'holidaycheck.com'],
+  booking: ['booking.com'], expedia: ['expediapartnercentral.com', 'expedia.com'], vrbo: ['vrbo.com'], airbnb: ['airbnb.com', 'airbnb.dk'],
+  tripadvisor: ['tripadvisor.com', 'tripadvisor.dk'], hostelworld: ['hostelworld.com'], agoda: ['agoda.com'], tripcom: ['trip.com'], thefork: ['thefork.com'],
+};
+
+/** Er linket et https-link til platformens egen side? */
+export function trustedPlatformUrl(platform, url) {
+  try {
+    const u = new URL(url);
+    if (u.protocol !== 'https:') return false;
+    return (DOMAINS[platform] ?? []).some((d) => u.hostname === d || u.hostname.endsWith(`.${d}`));
+  } catch { return false; }
+}
+
+/** Hvor medarbejderen svarer på denne anmeldelse. Linket fra platformens egen mail går direkte
+ *  til anmeldelsen og bruges først, hvis det peger på platformen selv. */
 export function replyUrl(review, profile) {
-  return profile?.reply_url || PLATFORMS[review.platform]?.reply || review.source_url || '';
+  if (review.source_url && trustedPlatformUrl(review.platform, review.source_url)) return review.source_url;
+  return profile?.reply_url || PLATFORMS[review.platform]?.reply || '';
 }
 
 // Sådan sætter man videresendelse op, vist under Indstillinger. Menuerne på platformene
@@ -28,5 +47,5 @@ export function replyUrl(review, profile) {
 export const FORWARD_GUIDE = [
   ['Booking.com, Expedia, Agoda', 'I platformens partnerportal: find indstillingen for, hvem der får mails om gæsteanmeldelser, og tilføj jeres adresse herfra som ekstra modtager.'],
   ['Airbnb, Vrbo, Tripadvisor, Hostelworld', 'Mails om nye anmeldelser går til den mail, kontoen er oprettet med. Lav en regel i mailprogrammet, der automatisk videresender dem til adressen herfra.'],
-  ['Kan I ikke finde det?', 'Videresend én anmeldelses-mail i hånden. Den dukker op her inden for et minut, og så ved I, at adressen virker.'],
+  ['Kan I ikke finde det?', 'Videresend én anmeldelses-mail i hånden. Når den dukker op under Seneste mails, ved I, at adressen virker.'],
 ];

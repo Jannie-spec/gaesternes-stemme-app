@@ -1,6 +1,55 @@
 import { groups, isLeader, reloadQueue, state } from '../state.js';
 import { platformName, replyUrl, PLATFORMS } from '../platforms.js';
 import { busy, copy, date, html, mount, score, toast, tone, when } from '../ui.js';
+import { renderNewReview } from './newreview.js';
+import { GOOGLE_DIRECT } from '../../config.js';
+
+const RULE = {
+  wrong_place: 'Handler om et andet sted', not_a_guest: 'Anmelderen har ikke været gæst', personal_info: 'Personoplysninger',
+  hate_or_threats: 'Hadefuld tale eller trusler', profanity_or_sexual: 'Groft sprog', spam_or_ads: 'Reklame eller spam',
+  conflict_of_interest: 'Interessekonflikt eller afpresning', off_topic: 'Handler ikke om oplevelsen', too_old: 'Oplevelsen er over 12 måneder gammel',
+  hearsay: 'Andres oplevelse, ikke egen', retaliatory: 'Hævn', extortion: 'Afpresning', not_about_stay: 'Handler ikke om opholdet', fake_engagement: 'Falsk anmeldelse',
+};
+
+function topicChips(r) {
+  if (!r.topics?.length) return '';
+  return html`<ul class="topics" aria-label="Emner">${r.topics.map((t) => html`<li class="topic topic-${t.sentiment === 'positive' ? 'pos' : 'neg'}">${t.sentiment === 'positive' ? 'Ros' : 'Kritik'}: ${t.topic}</li>`)}</ul>`;
+}
+
+function removalBox(r, leader, url) {
+  const c = r.removal_check;
+  if (!leader || !c || r.reply_status === 'posted') return '';
+  if (!c.possible) {
+    return html`<p class="removal-none"><strong>Regeltjek:</strong> ingen regelbrud fundet. ${c.explanation || ''} <button type="button" class="link quiet" id="recheck">Tjek igen</button></p>`;
+  }
+  return html`<section class="removal"><h2>Den kan muligvis fjernes</h2>
+    <p>${c.explanation || ''}</p>
+    <ul class="removal-rules">${c.rules.map((k) => html`<li>${RULE[k] ?? k}</li>`)}</ul>
+    ${c.report_draft ? html`<label class="field"><span>Udkast til indberetning (på engelsk)</span><textarea id="reportDraft" rows="5" readonly>${c.report_draft}</textarea></label>` : ''}
+    <div class="actions">
+      ${c.report_draft ? html`<button type="button" class="secondary" id="copyReport">Kopiér og åbn ${platformName(r.platform)}</button>` : ''}
+      <button type="button" class="link quiet" id="recheck">Tjek igen</button>
+    </div>
+    <p class="hint">Det er platformen, der afgør, om anmeldelsen fjernes.${r.removal_hold ? '' : ' Markér den som "svar ikke" nedenfor, mens I venter, så ingen svarer imens.'}</p>
+  </section>`;
+}
+
+// ---- Ekkoly-knappen (Chrome-udvidelsen) ----
+export const extensionReady = () => Boolean(document.documentElement.dataset.ekkolyExtension);
+
+function sendToExtension(payload) {
+  state.extPending = { ...(state.extPending ?? {}), [payload.id]: payload.text };
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => { window.removeEventListener('message', onAck); reject(new Error('Ekkoly-knappen svarede ikke. Genindlæs siden og prøv igen.')); }, 5000);
+    function onAck(e) {
+      if (e.source !== window || e.data?.source !== 'ekkoly-ext' || e.data.type !== 'reply-ack' || e.data.id !== payload.id) return;
+      clearTimeout(timer); window.removeEventListener('message', onAck);
+      e.data.ok ? resolve() : reject(new Error(e.data.error || 'Ekkoly-knappen kunne ikke åbne platformen.'));
+    }
+    window.addEventListener('message', onAck);
+    window.postMessage({ source: 'ekkoly-app', type: 'reply', ...payload }, location.origin);
+  });
+}
 
 const LANG = { da: 'dansk', en: 'engelsk', de: 'tysk', sv: 'svensk', no: 'norsk', nl: 'hollandsk', fr: 'fransk', es: 'spansk', it: 'italiensk', pl: 'polsk' };
 
@@ -42,22 +91,25 @@ export async function renderInbox(view, selectedId) {
   const leader = isLeader();
   mount(view, html`<div class="inbox ${selectedId ? 'has-selection' : ''}">
     <div class="list-pane">
-      <h1 class="page-title">I dag</h1>
+      <div class="list-head"><h1 class="page-title">I dag</h1><a class="add-review" href="#/ny">+ Sæt en anmeldelse ind</a></div>
+      <div id="gettingStarted"></div>
       ${placeFilter()}
       ${section('Svar nu', '', g.now, selectedId)}
       ${section('Venter på en leder', leader ? 'Gæsten kritiserer noget. Læs svaret igennem og godkend det.' : 'Gæsten kritiserer noget, så en leder godkender svaret først.', g.waiting, selectedId)}
       ${g.hold.length ? section('Svar ikke endnu', 'Vi prøver at få anmeldelsen fjernet. Et svar kan gøre det sværere.', g.hold, selectedId) : ''}
       ${section('Besvaret', '', g.done, selectedId, false)}
-      ${!state.queue.length ? html`<div class="empty-state"><h2>Ingen anmeldelser endnu</h2><p>Når I har sat videresendelse op eller forbundet Google, kommer anmeldelserne ind her af sig selv.</p><a class="button" href="#/indstillinger">Sæt det op</a></div>` : ''}
+      ${!state.queue.length ? html`<div class="empty-state"><h2>Ingen anmeldelser endnu</h2><p>Kopiér en af jeres seneste anmeldelser fra Booking.com, Google eller en anden platform, og se svarforslaget med det samme. Når videresendelsen er sat op, kommer de nye ind af sig selv.</p><div class="actions"><a class="button" href="#/ny">Sæt en anmeldelse ind</a><a class="secondary" href="#/indstillinger">Sæt videresendelse op</a></div></div>` : ''}
     </div>
     <div class="detail-pane" id="detail">${selectedId ? html`<p class="loading">Henter anmeldelsen</p>` : html`<div class="detail-empty"><p>Vælg en anmeldelse for at se den og svarforslaget.</p></div>`}</div>
   </div>`);
 
+  if (leader) gettingStarted(view.querySelector('#gettingStarted')).catch(() => {});
   view.querySelectorAll('[data-place]').forEach((b) => b.addEventListener('click', () => {
     state.place = b.dataset.place;
     renderInbox(view, selectedId);
   }));
-  if (selectedId) await renderDetail(view.querySelector('#detail'), selectedId, view);
+  if (selectedId === 'ny') renderNewReview(view.querySelector('#detail'));
+  else if (selectedId) await renderDetail(view.querySelector('#detail'), selectedId, view);
 }
 
 async function renderDetail(el, id, view) {
@@ -84,7 +136,8 @@ async function renderDetail(el, id, view) {
     <blockquote class="letter-body">${r.body ? r.body.split('\n').filter(Boolean).map((p) => html`<p>${p}</p>`) : html`<p class="muted">Gæsten gav kun en karakter.</p>`}</blockquote>
     <p class="letter-sign"><span>${r.author || 'Gæst'}</span>${scoreMark(r)}</p>
     ${r.raw?.excerpt ? html`<p class="note-line">Mailen viste kun et uddrag. Læs hele anmeldelsen på platformen, før I svarer.</p>` : ''}
-  </article>`;
+    ${topicChips(r)}
+  </article>${removalBox(r, leader, url)}`;
 
   let reply;
   if (r.removal_hold) {
@@ -106,14 +159,19 @@ async function renderDetail(el, id, view) {
         ${approved
           ? (viaApi
             ? html`<button type="button" class="primary" id="post">Læg svaret på Google</button>`
-            : html`<button type="button" class="primary" id="copyOpen">Kopiér og åbn ${platformName(r.platform)}</button>
+            : extensionReady() && /^https:\/\//.test(url)
+              ? html`<button type="button" class="primary" id="viaExt">Svar på ${platformName(r.platform)}</button>
+                   <button type="button" class="secondary" id="posted">Svaret er lagt ud</button>`
+              : html`<button type="button" class="primary" id="copyOpen">Kopiér og åbn ${platformName(r.platform)}</button>
                    <button type="button" class="secondary" id="posted">Svaret er lagt ud</button>`)
           : mustWait
             ? html`<button type="button" class="primary" id="saveForLeader">Gem til lederen</button>`
             : html`<button type="button" class="primary" id="approve">${r.needs_approval ? 'Godkend svaret' : 'Godkend'}</button>`}
         ${approved ? '' : html`<button type="button" class="secondary" id="regen">${draftText ? 'Lav nyt forslag' : 'Lav forslag'}</button>`}
       </div>
-      ${approved && !viaApi ? html`<p class="hint">${platformName(r.platform)} tillader ikke svar udefra. Svaret kopieres, og svarsiden åbner. Sæt det ind, og tryk så på Svaret er lagt ud.</p>` : ''}
+      ${approved && !viaApi ? (extensionReady()
+        ? html`<p class="hint">${platformName(r.platform)} åbner i en ny fane, og Ekkoly-knappen sætter svaret ind. Tryk på ${platformName(r.platform)}s egen Send-knap og derefter "Svaret er sendt" i Ekkoly-panelet.</p>`
+        : html`<p class="hint">Svaret kopieres, og svarsiden åbner. Sæt det ind, og tryk så på Svaret er lagt ud. Med <a href="../knappen.html" target="_blank" rel="noopener">Ekkoly-knappen til Chrome</a> bliver svaret sat ind for jer.</p>`) : ''}
     </section>`;
   }
 
@@ -156,6 +214,19 @@ async function renderDetail(el, id, view) {
     toast(ok ? 'Svaret er kopieret. Sæt det ind på platformen.' : 'Kunne ikke kopiere. Markér teksten og kopiér selv.', ok ? 'ok' : 'error');
     if (/^https:\/\//.test(url)) window.open(url, '_blank', 'noopener');
   });
+  el.querySelector('#viaExt')?.addEventListener('click', (e) => busy(e.target, async () => {
+    await sendToExtension({ id: r.id, platform: r.platform, url, text: textarea.value.trim(), author: r.author, snippet: (r.body || r.title || '').slice(0, 120) });
+    toast(`${platformName(r.platform)} åbner i en ny fane med svaret klar.`);
+  }));
+  el.querySelector('#copyReport')?.addEventListener('click', async () => {
+    const ok = await copy(el.querySelector('#reportDraft').value);
+    toast(ok ? 'Indberetningen er kopieret. Brug platformens "Rapportér" ved anmeldelsen.' : 'Kunne ikke kopiere. Markér teksten og kopiér selv.', ok ? 'ok' : 'error');
+    if (/^https:\/\//.test(url)) window.open(url, '_blank', 'noopener');
+  });
+  el.querySelector('#recheck')?.addEventListener('click', (e) => busy(e.target, async () => {
+    await state.api.recheckReview(r.id);
+    await refresh('Anmeldelsen er tjekket igen.');
+  }));
   el.querySelector('#posted')?.addEventListener('click', (e) => busy(e.target, async () => {
     await state.api.markPosted(r.id, textarea.value.trim());
     await refresh('Markeret som besvaret.');
@@ -182,4 +253,28 @@ async function renderDetail(el, id, view) {
       await refresh('Noten er gemt.');
     });
   });
+}
+
+// Kom i gang: de fire ting, der gør Ekkoly nyttigt. Vises for ledere, til alt er gjort eller listen er lukket.
+const doneKey = () => `ekkoly-kom-i-gang-${state.org.id}`;
+async function gettingStarted(el) {
+  try { if (localStorage.getItem(doneKey())) return; } catch { /* privat vindue: vis listen */ }
+  const [tone, connections, members] = await Promise.all([
+    state.api.tone(state.org.id), state.api.connections(state.org.id), state.api.members(state.org.id),
+  ]);
+  const steps = [
+    { done: state.queue.length > 0, text: 'Sæt jeres seneste anmeldelse ind, og se svarforslaget', href: '#/ny' },
+    { done: tone.length >= 3, text: 'Sæt 3 af jeres egne svar ind, så forslagene lyder som jer', href: '#/indstillinger#replies' },
+    ...(GOOGLE_DIRECT ? [{ done: connections.some((c) => c.provider === 'google'), text: 'Forbind Google', href: '#/indstillinger#google' }] : []),
+    { done: state.queue.some((r) => r.source === 'email'), text: 'Videresend anmeldelses-mails fra Google, Booking.com og de andre', href: '#/indstillinger#mail' },
+    { done: members.length > 1, text: 'Invitér en kollega', href: '#/indstillinger#team' },
+  ];
+  const left = steps.filter((s) => !s.done).length;
+  if (!left) { try { localStorage.setItem(doneKey(), '1'); } catch { /* ignorer */ } return; }
+  mount(el, html`<section class="getting-started" aria-label="Kom i gang">
+    <h2>Kom i gang <span class="count">${steps.length - left} af ${steps.length}</span></h2>
+    <ol>${steps.map((s) => html`<li class="${s.done ? 'is-done' : ''}">${s.done ? html`<span>${s.text}</span>` : html`<a href="${s.href}">${s.text}</a>`}</li>`)}</ol>
+    <button type="button" class="link quiet" id="hideStart">Skjul listen</button>
+  </section>`);
+  el.querySelector('#hideStart').addEventListener('click', () => { try { localStorage.setItem(doneKey(), '1'); } catch { /* ignorer */ } el.innerHTML = ''; });
 }
