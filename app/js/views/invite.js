@@ -3,7 +3,7 @@ import { busy, html, mount } from '../ui.js';
 
 export function renderInvite(root, token, done) {
   mount(root, html`<div class="entry"><section class="entry-card">
-    <p class="mark">Gæsternes stemme</p>
+    <p class="mark">Ekkoly</p>
     <h1>Bliv en del af teamet</h1>
     <p class="lead">Du er logget ind som ${state.user.email}. Tryk for at tage imod invitationen.</p>
     <button class="primary" id="accept" type="button">Tag imod invitationen</button>

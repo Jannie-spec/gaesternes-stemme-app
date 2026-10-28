@@ -29,7 +29,7 @@ function shell(active) {
       </select></label></div>` : '';
   const link = (href, label, key) => html`<a href="${href}" ${active === key ? 'aria-current=page' : ''}>${label}</a>`;
   return html`${demoBar}<header class="top">
-      <a class="mark" href="#/">Gæsternes stemme</a>
+      <a class="mark" href="#/">Ekkoly</a>
       <span class="org">${state.org?.name}</span>
       <nav aria-label="Hovedmenu">${link('#/', 'I dag', 'inbox')}${link('#/overblik', 'Overblik', 'overview')}${link('#/indstillinger', 'Indstillinger', 'settings')}</nav>
       <button class="link quiet" id="signOut" type="button">${state.demo ? 'Luk prøveversionen' : 'Log ud'}</button>

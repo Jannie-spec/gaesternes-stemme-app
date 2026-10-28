@@ -12,7 +12,7 @@ export function renderLogin(root, { inviteToken }) {
       : 'Skriv din mail. Du får et link, så du ikke skal huske en adgangskode. Er du ny, opretter du jer bagefter.';
   mount(root, html`<div class="entry">
     <section class="entry-card">
-      <p class="mark"><a href="../">Gæsternes stemme</a></p>
+      <p class="mark"><a href="../">Ekkoly</a></p>
       <h1>${title}</h1>
       <p class="lead">${lead}</p>
       <form id="loginForm" class="stack">

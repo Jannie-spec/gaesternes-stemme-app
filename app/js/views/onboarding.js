@@ -5,7 +5,7 @@ import { busy, html, mount } from '../ui.js';
 export function renderOnboarding(root, done) {
   mount(root, html`<div class="entry">
     <section class="entry-card wide">
-      <p class="mark">Gæsternes stemme</p>
+      <p class="mark">Ekkoly</p>
       <h1>Kom i gang</h1>
       <p class="lead">Tre ting, så er I klar. Alt kan ændres senere under Indstillinger.</p>
       <form id="setup" class="stack">
