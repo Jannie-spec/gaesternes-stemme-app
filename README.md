@@ -1,3 +1,3 @@
-# Gæsternes stemme – app
+# Gæsternes stemme
 
-Denne mappe er den offentlige web-app. Koden udvikles i det private repo gaesternes-stemme (mappen web/) og kopieres hertil.
+Website (roden) og app (/app). Udvikles i det private repo gaesternes-stemme og kopieres hertil med tools/build-pages.sh.

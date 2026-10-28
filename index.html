@@ -3,18 +3,243 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gæsternes stemme</title>
-<meta name="description" content="Alle jeres gæsteanmeldelser ét sted, med svarforslag i jeres egen tone.">
-<meta name="robots" content="noindex">
+<title>Gæsternes stemme – alle jeres anmeldelser ét sted</title>
+<meta name="description" content="Samler hotellets anmeldelser fra Google, Booking.com, Expedia, Airbnb, Tripadvisor og flere ét sted og skriver svarforslag i jeres egen tone. 14 dage gratis, uden kort.">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preload" href="fonts/public-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/literata-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css">
-<script type="module" src="js/app.js"></script>
+<meta property="og:title" content="Gæsternes stemme">
+<meta property="og:description" content="Alle jeres anmeldelser ét sted. Svar, der lyder som jer.">
+<meta property="og:type" content="website">
+<link rel="icon" href="app/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="app/fonts/literata-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="app/fonts/public-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
-<div id="app"><p class="boot">Henter Gæsternes stemme</p></div>
-<noscript>Gæsternes stemme kræver JavaScript.</noscript>
+<a class="skip" href="#indhold">Gå til indhold</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Gæsternes stemme, forsiden">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#2B5E7E"/><path d="M9 11h14v9h-7l-5 4v-4H9z" fill="none" stroke="#F3F5F4" stroke-width="2" stroke-linejoin="round"/></svg>
+      Gæsternes stemme
+    </a>
+    <nav aria-label="Sider">
+      <a href="#saadan">Sådan virker det</a>
+      <a href="#platforme">Platforme</a>
+      <a href="#pris">Pris</a>
+      <a href="#spoergsmaal">Spørgsmål</a>
+    </nav>
+    <a class="login" href="app/">Log ind</a>
+  </div>
+</header>
+
+<main id="indhold">
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Alle jeres anmeldelser ét sted. Svar, der lyder som jer.</h1>
+      <p class="lead">Gæsternes stemme samler anmeldelserne fra Google, Booking.com, Expedia, Airbnb, Tripadvisor og de andre. Hver anmeldelse får et svarforslag i jeres egen tone og på gæstens sprog. Kritik bliver liggende, til en leder har læst svaret.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
+        <a class="btn btn-quiet" href="app/?demo#/">Prøv demoen</a>
+      </div>
+      <p class="fine">Uden kort og uden binding. Det tager få minutter at komme i gang.</p>
+    </div>
+
+    <figure class="letter" aria-label="Eksempel: en anmeldelse og svarforslaget">
+      <div class="review">
+        <p class="meta"><span>Booking.com</span><span>Havblik Hotel</span><span class="score">6/10</span></p>
+        <blockquote>
+          <p>Udsigten fra værelset var helt fantastisk, og personalet i receptionen var søde.</p>
+          <p>Men der var larm fra køkkenet til langt ud på natten, og morgenmaden var sparsom efter kl. 9.</p>
+        </blockquote>
+        <cite>Lene, i går</cite>
+      </div>
+      <div class="reply">
+        <p class="label"><strong>Svarforslag</strong><span>Venter på en leder</span></p>
+        <div class="text">
+          <p>Kære Lene. Tak, fordi du tog dig tid til at skrive. Det glæder os, at du nød udsigten og blev godt modtaget i receptionen.</p>
+          <p>Du har ret i larmen fra køkkenet. Vi har flyttet opvasken, så den slutter kl. 22, og fra næste uge fylder vi buffeten op helt til kl. 10.</p>
+          <p>Mange hilsner fra Havblik</p>
+        </div>
+        <p class="approve"><span class="btn btn-primary" aria-hidden="true">Godkend svaret</span> Lederen retter til og godkender med ét tryk.</p>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<section class="block" id="saadan">
+  <div class="wrap">
+    <h2>Sådan kommer I i gang</h2>
+    <p class="intro">Ingen installation og ingen opstartsmøde. I opretter jer selv, og I kan stoppe igen, når I vil.</p>
+    <ol class="steps">
+      <li>
+        <h3>Opret jeres hotel</h3>
+        <p>Skriv jeres mail, navnet på hotellet og hvilke steder I har. Hotel, hostel, feriehus og restaurant kan ligge side om side.</p>
+      </li>
+      <li>
+        <h3>Forbind platformene</h3>
+        <p>Google forbindes med ét login. Fra Booking.com, Expedia, Airbnb og de andre videresender I platformenes anmeldelses-mails til jeres egen adresse hos os.</p>
+      </li>
+      <li>
+        <h3>Læs, ret og godkend</h3>
+        <p>Nye anmeldelser lander med et svarforslag. Medarbejderne svarer på ros. Kritik venter på, at en leder har læst svaret.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="block" id="funktioner">
+  <div class="wrap">
+    <h2>Tre ting, der sker hver uge</h2>
+    <div class="cases">
+      <article class="case">
+        <h3>En tysk gæst skriver på tysk</h3>
+        <p class="said">„Wunderschönes Häuschen direkt in den Dünen. Alles war sauber und gut ausgestattet.“</p>
+        <p class="then">Svarforslaget kommer på tysk med jeres hilsen nederst. I behøver ikke selv kunne skrive tysk.</p>
+      </article>
+      <article class="case">
+        <h3>En gæst anmelder det forkerte hotel</h3>
+        <p class="said">»Værelset lå ud mod hovedgaden i Skagen, og der var ingen elevator.«</p>
+        <p class="then">Anmeldelsen bliver markeret, fordi den beskriver et andet sted. I får et udkast til indberetningen til platformen, og ingen svarer, mens den behandles.</p>
+      </article>
+      <article class="case">
+        <h3>Receptionen ved, hvad der skete</h3>
+        <p class="said">Note fra receptionen: »Kaffemaskinen gik i stykker søndag morgen. Ny er bestilt.«</p>
+        <p class="then">Svarforslaget tager noten med. Gæsten får et konkret svar i stedet for en undskyldning, der kunne være sendt til hvem som helst.</p>
+      </article>
+    </div>
+    <p class="also">Desuden: én indbakke for alle steder, roller til ejer, leder og medarbejder, og bedømmelser over tid for hvert sted og hver platform.</p>
+  </div>
+</section>
+
+<section class="block" id="platforme">
+  <div class="wrap">
+    <h2>Platforme</h2>
+    <p class="intro">Vi henter kun anmeldelser på lovlig vis: via platformens officielle adgang eller de mails, platformen selv sender jer. Vi logger aldrig ind i jeres konti bag jeres ryg.</p>
+    <table class="platforms">
+      <thead><tr><th scope="col">Platform</th><th scope="col">Anmeldelser kommer ind</th><th scope="col">Svar sendes</th></tr></thead>
+      <tbody>
+        <tr><td>Google</td><td class="yes">Automatisk</td><td>Direkte fra Gæsternes stemme</td></tr>
+        <tr><td>Booking.com</td><td class="yes">Via jeres anmeldelses-mails</td><td>Svaret kopieres, og svarsiden åbnes med ét tryk</td></tr>
+        <tr><td>Expedia og Hotels.com</td><td class="yes">Via jeres anmeldelses-mails</td><td>Svaret kopieres, og svarsiden åbnes med ét tryk</td></tr>
+        <tr><td>Airbnb og Vrbo</td><td class="yes">Via jeres anmeldelses-mails</td><td>Svaret kopieres, og svarsiden åbnes med ét tryk</td></tr>
+        <tr><td>Tripadvisor</td><td class="yes">Via jeres anmeldelses-mails</td><td>Svaret kopieres, og svarsiden åbnes med ét tryk</td></tr>
+        <tr><td>Hostelworld, Agoda, HolidayCheck m.fl.</td><td class="yes">Via jeres anmeldelses-mails</td><td>Svaret kopieres, og svarsiden åbnes med ét tryk</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Vi arbejder på direkte forbindelse til flere platforme. Når en platform godkender os, skifter I uden at gøre noget.</p>
+  </div>
+</section>
+
+<section class="block origin">
+  <div class="wrap">
+    <div>
+      <h2>Bygget på et hotel i drift</h2>
+      <p>Vi driver Klippen Hotel i Gudhjem på Bornholm. Anmeldelserne kom ind seks steder fra, og svarene blev skrevet af den, der lige havde tid. Gæsternes stemme er det værktøj, vi selv manglede, og vi bruger det hver dag.</p>
+    </div>
+    <ul class="places" aria-label="Klippens steder i Gæsternes stemme">
+      <li><span>Grevens Dal</span> hotel</li>
+      <li><span>Therns Hotel</span> hotel</li>
+      <li><span>Skt. Jørgens Gaard</span> hotel</li>
+      <li><span>Therns Hostel</span> hostel</li>
+      <li><span>Jylkat</span> bar</li>
+      <li><span>Det Gamle Bryggeri</span> feriehus</li>
+    </ul>
+  </div>
+</section>
+
+<section class="block" id="pris">
+  <div class="wrap">
+    <h2>Én pris, alt med</h2>
+    <p class="intro">Prøv det hele gratis i 14 dage. Bagefter betaler I pr. sted pr. måned.</p>
+    <div class="price">
+      <div class="plan">
+        <p class="amount">595 kr. <small>pr. måned for første sted</small></p>
+        <p class="sub">395 kr. pr. måned for hvert ekstra sted. Priser ekskl. moms.</p>
+        <ul>
+          <li>Alle platforme og ubegrænset antal anmeldelser</li>
+          <li>Svarforslag i jeres tone og på gæstens sprog</li>
+          <li>Ubegrænset antal medarbejdere og ledere</li>
+          <li>Tjek af om dårlige anmeldelser kan fjernes</li>
+          <li>Data gemt i EU</li>
+        </ul>
+        <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
+      </div>
+      <div class="price-side">
+        <div>
+          <h3>Ingen binding</h3>
+          <p>Abonnementet løber en måned ad gangen. Stopper I, beholder I adgangen måneden ud.</p>
+        </div>
+        <div>
+          <h3>Ingen kort i prøveperioden</h3>
+          <p>Når de 14 dage er gået, vælger I selv, om I vil fortsætte. Gør I ikke, sker der ingenting.</p>
+        </div>
+        <div>
+          <h3>Pilothoteller</h3>
+          <p>De første 10 hoteller betaler 300 kr. pr. måned i tre måneder mod at fortælle os, hvad der virker, og hvad der mangler.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="spoergsmaal">
+  <div class="wrap">
+    <h2>Spørgsmål</h2>
+    <div class="faq">
+      <details>
+        <summary>Skriver AI'en svarene for os?</summary>
+        <p>Den skriver et forslag. I bestemmer selv, om ros må besvares med det samme, og svar på kritik bliver aldrig sendt, før en leder har godkendt dem. Svarene bygger på jeres egne tidligere svar, så de lyder som jer.</p>
+      </details>
+      <details>
+        <summary>Hvordan kommer anmeldelserne fra Booking.com ind?</summary>
+        <p>I får en fast mailadresse hos os. I Booking.com, Expedia, Airbnb og de andre sætter I anmeldelses-mails til også at gå til den adresse. Så kommer anmeldelsen ind, typisk inden for et minut.</p>
+      </details>
+      <details>
+        <summary>Hvad sker der med vores data?</summary>
+        <p>Alt gemmes på servere i EU (Frankfurt). Hvert hotel ser kun sine egne data. Vi sælger ikke data og bruger dem ikke til andet end at levere tjenesten. Læs mere i <a href="privatliv.html">privatlivspolitikken</a>.</p>
+      </details>
+      <details>
+        <summary>Kan vi have flere hoteller eller restauranter?</summary>
+        <p>Ja. Hvert sted får sin egen hilsen og sin egen udvikling over tid, og I kan filtrere indbakken på sted. Første sted koster 595 kr. og hvert ekstra 395 kr. pr. måned.</p>
+      </details>
+      <details>
+        <summary>Hvem kan logge ind?</summary>
+        <p>Så mange af jeres folk, som I vil. Der er tre roller: ejer, leder og medarbejder. Man logger ind med et link på mail, så ingen skal huske en adgangskode.</p>
+      </details>
+      <details>
+        <summary>Hvordan får vi hjælp?</summary>
+        <p>Skriv til <a href="mailto:jannie@bybuch.com">jannie@bybuch.com</a>. Vi svarer på mail, normalt samme dag på hverdage.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="block closing">
+  <div class="wrap">
+    <h2>Se jeres egne anmeldelser i aften</h2>
+    <p class="intro">Opret jer på få minutter. Ingen kort, ingen binding.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
+      <a class="btn btn-quiet" href="app/?demo#/">Prøv demoen</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Gæsternes stemme leveres af J. Buch Invest ApS, CVR 37364630, Skodsborg Strandvej 288, 2942 Skodsborg.</p>
+    <nav aria-label="Om tjenesten">
+      <a href="betingelser.html">Handelsbetingelser</a>
+      <a href="privatliv.html">Privatlivspolitik</a>
+      <a href="mailto:jannie@bybuch.com">Kontakt</a>
+      <a href="app/">Log ind</a>
+    </nav>
+  </div>
+</footer>
 </body>
 </html>
