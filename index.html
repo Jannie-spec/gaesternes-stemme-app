@@ -11,17 +11,16 @@
 <meta property="og:description" content="Alle jeres anmeldelser ét sted. Svar, der lyder som jer.">
 <meta property="og:type" content="website">
 <link rel="icon" href="app/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="app/fonts/literata-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="app/fonts/public-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="app/fonts/public-sans-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="app/fonts/literata-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="site.css">
 </head>
 <body>
 <a class="skip" href="#indhold">Gå til indhold</a>
-
 <header class="top">
   <div class="wrap">
     <a class="brand" href="./" aria-label="Ekkoly, forsiden">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#2B5E7E"/><path d="M9 11h14v9h-7l-5 4v-4H9z" fill="none" stroke="#F3F5F4" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="currentColor"/><path d="M9 11h14v9h-7l-5 4v-4H9z" fill="none" stroke="var(--brand-mark)" stroke-width="2" stroke-linejoin="round"/></svg>
       Ekkoly
     </a>
     <nav aria-label="Sider">
@@ -31,62 +30,107 @@
       <a href="#spoergsmaal">Spørgsmål</a>
     </nav>
     <a class="login" href="app/">Log ind</a>
+    <a class="btn btn-primary btn-small" href="app/?start#/">Prøv gratis</a>
   </div>
 </header>
 
 <main id="indhold">
-
 <section class="hero">
   <div class="wrap">
-    <div>
+    <div class="hero-text">
       <h1>Alle jeres anmeldelser ét sted. Svar, der lyder som jer.</h1>
       <p class="lead">Ekkoly samler anmeldelserne fra Google, Booking.com, Expedia, Airbnb, Tripadvisor og de andre. Hver anmeldelse får et svarforslag i jeres egen tone og på gæstens sprog. Kritik bliver liggende, til en leder har læst svaret.</p>
       <div class="actions">
         <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
-        <a class="btn btn-quiet" href="app/?demo#/">Prøv demoen</a>
+        <a class="btn btn-quiet" href="app/?demo#/">Se demoen</a>
       </div>
-      <p class="fine">Uden kort og uden binding. Bagefter 595 kr. pr. måned for første sted, ekskl. moms.</p>
+      <p class="fine">Uden kort og uden binding. Bagefter 595 kr. om måneden for første sted, ekskl. moms.</p>
     </div>
 
-    <figure class="letter" aria-label="Eksempel: en anmeldelse og svarforslaget">
-      <div class="review">
-        <p class="meta"><span>Booking.com</span><span>Havblik Hotel</span><span class="score">6/10</span></p>
-        <blockquote>
-          <p>Udsigten fra værelset var helt fantastisk, og personalet i receptionen var søde.</p>
-          <p>Men der var larm fra køkkenet til langt ud på natten, og morgenmaden var sparsom efter kl. 9.</p>
-        </blockquote>
-        <cite>Lene, i går</cite>
-        <p class="note-staff">Note fra køkkenet: Opvasken slutter nu kl. 22. Buffeten fyldes op til kl. 10 fra mandag.</p>
+    <div class="inbox" data-inbox>
+      <div class="inbox-tabs" role="tablist" aria-label="Eksempler på anmeldelser">
+        <button type="button" role="tab" id="t-lene" aria-controls="p-lene" aria-selected="true">
+          <span class="who">Lene</span><span class="where">Booking.com</span><span class="score score-mid">6/10</span>
+        </button>
+        <button type="button" role="tab" id="t-sophie" aria-controls="p-sophie" aria-selected="false" tabindex="-1">
+          <span class="who">Sophie</span><span class="where">Airbnb</span><span class="score score-good">5/5</span>
+        </button>
+        <button type="button" role="tab" id="t-tom" aria-controls="p-tom" aria-selected="false" tabindex="-1">
+          <span class="who">Tom</span><span class="where">Tripadvisor</span><span class="score score-low">2/5</span>
+        </button>
       </div>
-      <div class="reply">
-        <p class="label"><strong>Svarforslag</strong><span>Venter på en leder</span></p>
-        <div class="text">
-          <p>Kære Lene. Tak, fordi du tog dig tid til at skrive. Det glæder os, at du nød udsigten og blev godt modtaget i receptionen.</p>
-          <p>Du har ret i larmen fra køkkenet. Vi har flyttet opvasken, så den slutter kl. 22, og fra mandag fylder vi buffeten op helt til kl. 10.</p>
-          <p>Mange hilsner fra Havblik</p>
+
+      <div class="inbox-panel" role="tabpanel" id="p-lene" aria-labelledby="t-lene">
+        <div class="guest">
+          <blockquote lang="da">
+            <p>Udsigten fra værelset var helt fantastisk, og personalet i receptionen var søde.</p>
+            <p>Men der var larm fra køkkenet til langt ud på natten, og morgenmaden var sparsom efter kl. 9.</p>
+          </blockquote>
+          <p class="note"><strong>Note fra køkkenet:</strong> Opvasken slutter nu kl. 22. Buffeten fyldes op til kl. 10 fra mandag.</p>
         </div>
-        <p class="approve"><span class="btn btn-primary" aria-hidden="true">Godkend svaret</span> Svaret bygger på køkkenets note. Lederen retter til og godkender.</p>
+        <div class="draft">
+          <p class="draft-head"><span>Svarforslag på dansk</span><span class="status status-wait">Venter på en leder</span></p>
+          <div class="draft-text">
+            <p>Kære Lene. Tak, fordi du tog dig tid til at skrive. Det glæder os, at du nød udsigten og blev godt modtaget i receptionen.</p>
+            <p>Du har ret i larmen fra køkkenet. Opvasken slutter nu kl. 22, og fra mandag fylder vi buffeten op helt til kl. 10.</p>
+            <p>Mange hilsner fra Havblik</p>
+          </div>
+          <p class="draft-why">Kritik i anmeldelsen, så en leder godkender svaret. Forslaget bruger køkkenets note.</p>
+        </div>
       </div>
-    </figure>
+
+      <div class="inbox-panel" role="tabpanel" id="p-sophie" aria-labelledby="t-sophie" hidden>
+        <div class="guest">
+          <blockquote lang="de">
+            <p>Wunderschönes Häuschen direkt in den Dünen. Alles war sauber und gut ausgestattet, und der Gastgeber hat schnell geantwortet.</p>
+          </blockquote>
+        </div>
+        <div class="draft">
+          <p class="draft-head"><span>Svarforslag på tysk</span><span class="status status-ok">Klar til at sende</span></p>
+          <div class="draft-text" lang="de">
+            <p>Liebe Sophie, vielen Dank für die schöne Bewertung. Es freut uns sehr, dass Ihnen das Häuschen in den Dünen gefallen hat.</p>
+            <p>Wir würden uns freuen, Sie wieder bei uns begrüßen zu dürfen. Viele Grüße von Havblik Hytter</p>
+          </div>
+          <p class="draft-why">Ros uden kritik, så medarbejderen kan sende det med det samme. Ingen behøver at kunne tysk.</p>
+        </div>
+      </div>
+
+      <div class="inbox-panel" role="tabpanel" id="p-tom" aria-labelledby="t-tom" hidden>
+        <div class="guest">
+          <blockquote lang="en">
+            <p>The room faced the main street in Skagen and there was no lift. Never again.</p>
+          </blockquote>
+        </div>
+        <div class="draft draft-flag">
+          <p class="draft-head"><span>Svar ikke endnu</span><span class="status status-flag">Kan muligvis fjernes</span></p>
+          <div class="draft-text">
+            <p>Anmeldelsen beskriver et hotel ved hovedgaden i Skagen. Havblik ligger ved stranden og har elevator, så den handler sandsynligvis om et andet sted.</p>
+            <p>Ekkoly har skrevet et udkast til indberetningen til Tripadvisor. Ingen svarer, mens sagen behandles.</p>
+          </div>
+          <p class="draft-why">Det er platformen, der afgør, om anmeldelsen fjernes.</p>
+        </div>
+      </div>
+      <p class="inbox-caption">Tre anmeldelser, som de ser ud i Ekkoly. Klik mellem dem.</p>
+    </div>
   </div>
 </section>
 
 <section class="block" id="saadan">
   <div class="wrap">
     <h2>Sådan kommer I i gang</h2>
-    <p class="intro">Ingen installation og ingen opstartsmøde. I opretter jer selv, og I kan stoppe igen, når I vil.</p>
+    <p class="intro">I opretter jer selv på få minutter. Der er intet at installere og intet opstartsmøde.</p>
     <ol class="steps">
       <li>
         <h3>Opret jeres hotel</h3>
-        <p>Skriv jeres mail, navnet på hotellet og hvilke steder I har. Hotel, hostel, feriehus og restaurant kan ligge side om side.</p>
+        <p>Skriv jeres mail, hotellets navn og hvilke steder I har. Hotel, hostel, feriehus og restaurant kan ligge side om side.</p>
       </li>
       <li>
-        <h3>Forbind platformene</h3>
-        <p>Fra Google, Booking.com, Expedia, Airbnb og de andre videresender I platformenes anmeldelses-mails til jeres egen adresse hos os. Vil I se det virke med det samme, sætter I bare en af jeres seneste anmeldelser ind.</p>
+        <h3>Sæt en anmeldelse ind</h3>
+        <p>Kopiér en af jeres seneste anmeldelser ind, og læs svarforslaget med det samme.</p>
       </li>
       <li>
-        <h3>Læs, ret og godkend</h3>
-        <p>Nye anmeldelser lander med et svarforslag. Sæt et par af jeres egne svar ind, så rammer forslagene jeres tone fra start. Hvert svar, I godkender, gør dem bedre.</p>
+        <h3>Lad resten komme af sig selv</h3>
+        <p>Videresend platformenes anmeldelses-mails til jeres egen adresse hos os. Så lander nye anmeldelser i indbakken med et forslag klar.</p>
       </li>
     </ol>
   </div>
@@ -94,55 +138,82 @@
 
 <section class="block" id="funktioner">
   <div class="wrap">
-    <h2>Tre ting, der sker hver uge</h2>
-    <div class="cases">
-      <article class="case">
-        <h3>En tysk gæst skriver på tysk</h3>
-        <p class="said">„Wunderschönes Häuschen direkt in den Dünen. Alles war sauber und gut ausgestattet.“</p>
-        <p class="then">Svarforslaget kommer på tysk med jeres hilsen nederst. I behøver ikke selv kunne skrive tysk.</p>
+    <h2>Det, der gør forskellen i en travl reception</h2>
+    <div class="features">
+      <article class="feature">
+        <div class="feature-text">
+          <h3>En leder ser kritikken først</h3>
+          <p>Ros kan medarbejderne svare på med det samme. Når en gæst kritiserer noget, venter svaret på en leder. Grænsen bestemmer I selv.</p>
+        </div>
+        <div class="mini" aria-hidden="true">
+          <p class="mini-row"><span>Martin K., Google</span><span class="status status-ok">Svar nu</span></p>
+          <p class="mini-row"><span>Lene, Booking.com</span><span class="status status-wait">Venter på en leder</span></p>
+          <p class="mini-row"><span>Anna, Expedia</span><span class="status status-ok">Svar nu</span></p>
+        </div>
       </article>
-      <article class="case">
-        <h3>En gæst anmelder det forkerte hotel</h3>
-        <p class="said">»Værelset lå ud mod hovedgaden i Skagen, og der var ingen elevator.«</p>
-        <p class="then">Anmeldelsen bliver markeret, fordi den beskriver et andet sted. I får et udkast til indberetningen til platformen, og ingen svarer, mens den behandles.</p>
+      <article class="feature">
+        <div class="feature-text">
+          <h3>Receptionens viden kommer med i svaret</h3>
+          <p>Skriv en kort note til anmeldelsen, fx hvad der er gjort ved problemet. Svarforslaget bruger noten, så gæsten får et konkret svar i stedet for en standardundskyldning.</p>
+        </div>
+        <div class="mini" aria-hidden="true">
+          <p class="mini-note"><strong>Note fra receptionen</strong> Kaffemaskinen gik i stykker søndag morgen. Ny er bestilt.</p>
+          <p class="mini-quote">»Tak, fordi du sagde det. Kaffemaskinen gik i stykker søndag, og en ny er allerede bestilt.«</p>
+        </div>
       </article>
-      <article class="case">
-        <h3>Receptionen ved, hvad der skete</h3>
-        <p class="said">Note fra receptionen: »Kaffemaskinen gik i stykker søndag morgen. Ny er bestilt.«</p>
-        <p class="then">Svarforslaget tager noten med. Gæsten får et konkret svar i stedet for en undskyldning, der kunne være sendt til hvem som helst.</p>
+      <article class="feature">
+        <div class="feature-text">
+          <h3>Spørg jeres anmeldelser</h3>
+          <p>Skriv et spørgsmål, fx hvad gæsterne klager mest over på et bestemt sted. Ekkoly læser anmeldelserne og svarer med eksempler, I kan klikke ind på.</p>
+        </div>
+        <div class="mini" aria-hidden="true">
+          <p class="mini-ask">Hvad siger gæsterne om morgenmaden?</p>
+          <p class="mini-answer">Morgenmaden roses i 14 anmeldelser, især det hjemmebagte brød. 3 gæster skriver, at buffeten var tom efter kl. 9.</p>
+        </div>
+      </article>
+      <article class="feature">
+        <div class="feature-text">
+          <h3>Månedsrapport og stederne side om side</h3>
+          <p>Se hvert sted med antal anmeldelser, gennemsnit og svarprocent. Hver måned kan I gemme en rapport som PDF til ejere og ledelse.</p>
+        </div>
+        <div class="mini mini-kpis" aria-hidden="true">
+          <p><span>Nye anmeldelser</span><strong>42</strong></p>
+          <p><span>Gennemsnit af 10</span><strong>8,7</strong></p>
+          <p><span>Besvaret</span><strong>95 %</strong></p>
+        </div>
       </article>
     </div>
-    <p class="also">Desuden: én indbakke for alle steder, roller til ejer, leder og medarbejder, stederne side om side, en månedsrapport som PDF, og I kan spørge jeres anmeldelser, fx »Hvad klager gæsterne mest over?«, og få svar med eksempler.</p>
   </div>
 </section>
 
 <section class="block" id="platforme">
   <div class="wrap">
     <h2>Platforme</h2>
-    <p class="intro">Vi henter kun anmeldelser på lovlig vis: via platformens officielle adgang eller de mails, platformen selv sender jer. Vi logger aldrig ind i jeres konti bag jeres ryg.</p>
+    <p class="intro">Vi henter kun anmeldelser på lovlig vis: via platformens officielle adgang eller de mails, platformen selv sender jer. Vi logger aldrig ind i jeres konti.</p>
     <table class="platforms">
       <thead><tr><th scope="col">Platform</th><th scope="col">Anmeldelser kommer ind</th><th scope="col">Svar sendes</th></tr></thead>
       <tbody>
-        <tr><td>Google</td><td class="yes">Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>. Direkte fra Ekkoly, når Google har godkendt os</td></tr>
-        <tr><td>Booking.com</td><td class="yes">Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
-        <tr><td>Expedia og Hotels.com</td><td class="yes">Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
-        <tr><td>Airbnb</td><td class="yes">Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
-        <tr><td>Vrbo</td><td class="yes">Via jeres anmeldelses-mails</td><td>Vrbo viser i øjeblikket ikke værtens svar offentligt</td></tr>
-        <tr><td>Tripadvisor</td><td class="yes">Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
+        <tr><td>Google</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>. Direkte fra Ekkoly, når Google har godkendt os</td></tr>
+        <tr><td>Booking.com</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
+        <tr><td>Expedia og Hotels.com</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
+        <tr><td>Airbnb</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
+        <tr><td>Tripadvisor</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
+        <tr><td>Vrbo</td><td>Via jeres anmeldelses-mails</td><td>Vrbo viser i øjeblikket ikke værtens svar offentligt</td></tr>
         <tr><td>Hostelworld, Agoda, HolidayCheck, Trip.com, Trustpilot</td><td>Sæt anmeldelsen ind i hånden. Mails kommer snart</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
       </tbody>
     </table>
-    <p class="note">Booking.com, Expedia, Airbnb og Tripadvisor giver kun store partnere lov til at sende svar automatisk. Med Ekkoly-knappen til Chrome åbner platformens svarside med svaret klar, og I trykker selv Send. Uden knappen kopierer Ekkoly svaret og åbner svarsiden, så I bare skal sætte det ind. Vi arbejder på at få direkte adgang, og når en platform godkender os, skifter I uden at gøre noget.</p>
+    <p class="note">Booking.com, Expedia, Airbnb og Tripadvisor lader kun store partnere sende svar automatisk. Med Ekkoly-knappen til Chrome åbner platformens svarside med svaret klar, og I trykker selv Send. Uden knappen kopierer Ekkoly svaret og åbner svarsiden. Vi arbejder på direkte adgang, og når en platform godkender os, skifter I uden at gøre noget.</p>
   </div>
 </section>
 
-<section class="block origin">
+<section class="origin">
   <div class="wrap">
-    <div>
+    <div class="origin-text">
       <h2>Hvorfor jeg byggede Ekkoly</h2>
       <p>Jeg hedder Jannie Buch Thorborg. Sammen med Martin Buch Thorborg ejer og driver jeg Klippen Hotel i Gudhjem på Bornholm. Siden 2020 har vi overtaget og sat stederne i stand ét for ét, og i dag har vi tre hoteller, et hostel, en bar og et feriehus.</p>
-      <p>Hos os tager jeg mig af den digitale side: strategi, IT og kunstig intelligens. For hvert nyt sted kom der flere anmeldelser på flere platforme, og det blev en daglig opgave bare at finde dem. De gode anmeldelser fik for sjældent et svar, og de kritiske fortjente mere omtanke, end der var tid til i en travl reception.</p>
-      <p>Derfor byggede jeg et værktøj til os selv. Det samler alle anmeldelser, skriver svarforslag i vores egen tone og sørger for, at en leder ser kritikken, før der bliver svaret. Vi har brugt det hver dag, og nu kan andre steder også få det.</p>
+      <p>Hos os tager jeg mig af den digitale side. For hvert nyt sted kom der flere anmeldelser på flere platforme, og det blev en daglig opgave bare at finde dem. De gode anmeldelser fik for sjældent et svar, og de kritiske fortjente mere omtanke, end der var tid til i en travl reception.</p>
+      <p>Derfor byggede jeg et værktøj til os selv. Det samler alle anmeldelser, skriver svarforslag i vores egen tone og sørger for, at en leder ser kritikken, før der bliver svaret. Vi bruger det hver dag, og nu kan andre steder også få det.</p>
+      <p class="signature">Jannie Buch Thorborg<span>Medejer, Klippen Hotel, Gudhjem</span></p>
     </div>
     <ul class="places" aria-label="Klippens steder, der bruger Ekkoly">
       <li><span>Grevens Dal</span> hotel, siden 2021</li>
@@ -156,37 +227,26 @@
 </section>
 
 <section class="block" id="pris">
-  <div class="wrap">
-    <h2>Én pris, alt med</h2>
-    <p class="intro">Prøv det hele gratis i 14 dage. Bagefter betaler I pr. sted pr. måned.</p>
-    <div class="price">
-      <div class="plan">
-        <p class="amount">595 kr. <small>pr. måned for første sted</small></p>
-        <p class="sub">395 kr. pr. måned for hvert ekstra sted. Priser ekskl. moms.</p>
-        <ul>
-          <li>Alle platforme og ubegrænset antal anmeldelser</li>
-          <li>Svarforslag i jeres tone og på gæstens sprog</li>
-          <li>Ubegrænset antal medarbejdere og ledere</li>
-          <li>Tjek af om dårlige anmeldelser kan fjernes</li>
-          <li>Database i EU (Frankfurt)</li>
-        </ul>
-        <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
-      </div>
-      <div class="price-side">
-        <div>
-          <h3>Ingen binding</h3>
-          <p>Abonnementet løber en måned ad gangen. Stopper I, beholder I adgangen måneden ud.</p>
-        </div>
-        <div>
-          <h3>Ingen kort i prøveperioden</h3>
-          <p>Når de 14 dage er gået, vælger I selv, om I vil fortsætte. Gør I ikke, bliver der ikke trukket noget, og jeres data slettes efter 90 dage.</p>
-        </div>
-        <div>
-          <h3>Pilothoteller</h3>
-          <p>De første 10 hoteller betaler 300 kr. pr. måned i tre måneder mod at fortælle os, hvad der virker, og hvad der mangler.</p>
-        </div>
-      </div>
+  <div class="wrap price">
+    <div class="price-main">
+      <h2>Én pris, alt med</h2>
+      <p class="amount">595 kr. <span>om måneden for første sted</span></p>
+      <p class="sub">395 kr. om måneden for hvert ekstra sted. Priser ekskl. moms.</p>
+      <ul class="included">
+        <li>Alle platforme og ubegrænset antal anmeldelser</li>
+        <li>Svarforslag i jeres tone og på gæstens sprog</li>
+        <li>Ubegrænset antal medarbejdere og ledere</li>
+        <li>Tjek af om dårlige anmeldelser kan fjernes</li>
+        <li>Spørg jeres anmeldelser og månedsrapport</li>
+        <li>Database i EU (Frankfurt)</li>
+      </ul>
+      <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
     </div>
+    <dl class="terms">
+      <div><dt>Ingen binding</dt><dd>Abonnementet løber en måned ad gangen. Stopper I, beholder I adgangen måneden ud.</dd></div>
+      <div><dt>Ingen kort i prøveperioden</dt><dd>Når de 14 dage er gået, vælger I selv, om I vil fortsætte. Gør I ikke, bliver der ikke trukket noget, og jeres data slettes efter 90 dage.</dd></div>
+      <div><dt>Pilothoteller</dt><dd>De første 10 hoteller betaler 300 kr. om måneden i tre måneder mod at fortælle os, hvad der virker, og hvad der mangler.</dd></div>
+    </dl>
   </div>
 </section>
 
@@ -204,11 +264,11 @@
       </details>
       <details>
         <summary>Hvad sker der med vores data?</summary>
-        <p>Alt gemmes på servere i EU (Frankfurt). Hvert hotel ser kun sine egne data. Vi sælger ikke data og bruger dem ikke til andet end at levere tjenesten. Læs mere i <a href="privatliv.html">privatlivspolitikken</a>.</p>
+        <p>Databasen ligger i EU (Frankfurt). Hvert hotel ser kun sine egne data. Vi sælger ikke data og bruger dem ikke til andet end at levere tjenesten. Læs mere i <a href="privatliv.html">privatlivspolitikken</a>.</p>
       </details>
       <details>
         <summary>Kan vi have flere hoteller eller restauranter?</summary>
-        <p>Ja. Hvert sted får sin egen hilsen og sin egen udvikling over tid, og I kan filtrere indbakken på sted. Første sted koster 595 kr. og hvert ekstra 395 kr. pr. måned.</p>
+        <p>Ja. Hvert sted får sin egen hilsen og sin egen udvikling over tid, og I kan se stederne side om side. Første sted koster 595 kr. og hvert ekstra 395 kr. om måneden.</p>
       </details>
       <details>
         <summary>Hvem kan logge ind?</summary>
@@ -222,17 +282,16 @@
   </div>
 </section>
 
-<section class="block closing">
+<section class="closing">
   <div class="wrap">
     <h2>Se jeres første svarforslag om fem minutter</h2>
-    <p class="intro">Opret jer, sæt en af jeres seneste anmeldelser ind, og læs svaret. Ingen kort, ingen binding.</p>
+    <p>Opret jer, sæt en af jeres seneste anmeldelser ind, og læs svaret. Ingen kort, ingen binding.</p>
     <div class="actions">
-      <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
-      <a class="btn btn-quiet" href="app/?demo#/">Prøv demoen</a>
+      <a class="btn btn-light" href="app/?start#/">Start 14 dages gratis prøve</a>
+      <a class="btn btn-ghost" href="app/?demo#/">Se demoen</a>
     </div>
   </div>
 </section>
-
 </main>
 
 <footer>
@@ -241,10 +300,35 @@
     <nav aria-label="Om tjenesten">
       <a href="betingelser.html">Handelsbetingelser</a>
       <a href="privatliv.html">Privatlivspolitik</a>
+      <a href="knappen.html">Ekkoly-knappen</a>
       <a href="mailto:kontakt@ekkoly.com">Kontakt</a>
       <a href="app/">Log ind</a>
     </nav>
   </div>
 </footer>
+<script>
+// Indbakken øverst: skift mellem anmeldelserne med klik eller piletaster
+(() => {
+  const box = document.querySelector('[data-inbox]');
+  if (!box) return;
+  const tabs = [...box.querySelectorAll('[role=tab]')];
+  const select = (tab, focus) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+      if (d) { e.preventDefault(); select(tabs[(i + d + tabs.length) % tabs.length], true); }
+    });
+  });
+})();
+</script>
 </body>
 </html>
