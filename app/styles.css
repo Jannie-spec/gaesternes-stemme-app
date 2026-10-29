@@ -396,3 +396,10 @@ main { max-width: 1280px; margin: 0 auto; padding-block: 24px 64px; padding-left
 }
 .scores.keep-cols { table-layout: auto; }
 .scores.keep-cols th:nth-child(n) { width: auto; }
+
+/* Logo: det andet k er et ekko af det første */
+.logo { font: 600 22px/1 var(--sans); letter-spacing: -0.035em; color: var(--ink); display: inline-flex; }
+.logo .echo { color: var(--harbour); opacity: .7; }
+
+.logo-mark { width: 30px; height: 30px; flex: none; margin-right: 10px; --logo-bg: #1d5a73; --logo-fg: #fff; --logo-echo: #86b9d3; }
+.brand, .mark, .mark a { display: inline-flex; align-items: center; text-decoration: none; }
