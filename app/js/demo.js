@@ -139,6 +139,15 @@ export const demo = {
   async adminOrgs() { return wait(demoAdminOrgs); },
   async adminExtendTrial(oid, days) { const o = demoAdminOrgs.find((x) => x.id === oid); o.trial_ends_at = new Date(Math.max(Date.parse(o.trial_ends_at), Date.now()) + days * 86400000).toISOString(); return wait(o.trial_ends_at); },
   async adminSetPilot(oid, on) { if (on && demoAdminOrgs.filter((x) => x.pilot_pricing && x.id !== oid).length >= 10) throw new Error('Der er allerede 10 pilothoteller'); demoAdminOrgs.find((x) => x.id === oid).pilot_pricing = on; return wait(on); },
+  async reviewStats() { return wait(reviews.map((r) => ({ ...r }))); },
+  async ask(_o, question) {
+    const crit = reviews.filter((r) => r.topics?.some((t) => t.sentiment === 'negative'));
+    return wait({
+      answer: `I prøveversionen svarer Ekkoly med et eksempel. Spørgsmålet var: "${question}"\nI den rigtige version læser Ekkoly alle jeres anmeldelser og svarer konkret, fx at støj fra køkkenet og morgenmaden efter kl. 9 går igen i kritikken på Havblik Hotel.`,
+      examples: crit.slice(0, 2).map((r) => ({ review_id: r.id, quote: (r.body ?? '').split(/[.!]/)[0].replace(/^Positivt: |^Negativt: /, '').slice(0, 120) })),
+      enough_data: true, count: reviews.length,
+    }, 1200);
+  },
   async addReview(_o, r) {
     if (reviews.some((x) => x.dedupe_key === r.dedupe_key)) throw new Error('Den anmeldelse er allerede sat ind.');
     const needs = r.rating == null || r.rating / r.scale < ORG.approval_threshold;

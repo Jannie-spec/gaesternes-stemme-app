@@ -124,6 +124,20 @@ export const api = {
   async adminExtendTrial(orgId, days) { const c = await client(); return must(await c.rpc('admin_extend_trial', { p_org: orgId, p_days: days })); },
   async adminSetPilot(orgId, on) { const c = await client(); return must(await c.rpc('admin_set_pilot', { p_org: orgId, p_on: on })); },
 
+  // Alle anmeldelser til Indsigt og månedsrapport (kun de felter, der skal regnes på), hentet 1000 ad gangen
+  async reviewStats(orgId) {
+    const c = await client();
+    const out = [];
+    for (let from = 0; from < 20000; from += 1000) {
+      const rows = must(await c.from('reviews').select('id, property_id, platform, author, rating, scale, title, body, published_at, first_seen_at, topics, reply_status')
+        .eq('org_id', orgId).order('published_at', { ascending: false, nullsFirst: false }).range(from, from + 999));
+      out.push(...rows);
+      if (rows.length < 1000) break;
+    }
+    return out;
+  },
+  ask: (orgId, question, propertyId, days) => fn('ask', { org_id: orgId, question, property_id: propertyId, days }),
+
   async snapshots(orgId) { const c = await client(); return must(await c.from('score_snapshots').select('*').eq('org_id', orgId).order('observed_at')); },
   async inbound(orgId) { const c = await client(); return must(await c.from('inbound_emails').select('id, from_address, subject, received_at, status, platform, error').eq('org_id', orgId).order('received_at', { ascending: false }).limit(10)); },
 };

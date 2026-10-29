@@ -9,6 +9,8 @@ import { renderOverview } from './views/overview.js';
 import { renderSettings } from './views/settings.js';
 import { renderInvite } from './views/invite.js';
 import { renderAdmin } from './views/admin.js';
+import { renderInsight } from './views/insight.js';
+import { renderReport } from './views/report.js';
 
 const root = document.querySelector('#app');
 
@@ -34,7 +36,7 @@ function shell(active) {
   return html`${demoBar}<header class="top">
       <a class="mark" href="#/">Ekkoly</a>
       <span class="org">${state.org?.name}</span>
-      <nav aria-label="Hovedmenu">${link('#/', 'I dag', 'inbox')}${link('#/overblik', 'Overblik', 'overview')}${link('#/indstillinger', 'Indstillinger', 'settings')}${state.isAdmin ? link('#/admin', 'Admin', 'admin') : ''}</nav>
+      <nav aria-label="Hovedmenu">${link('#/', 'I dag', 'inbox')}${link('#/overblik', 'Overblik', 'overview')}${link('#/indsigt', 'Indsigt', 'insight')}${link('#/indstillinger', 'Indstillinger', 'settings')}${state.isAdmin ? link('#/admin', 'Admin', 'admin') : ''}</nav>
       <button class="link quiet" id="signOut" type="button">${state.demo ? 'Luk prøveversionen' : 'Log ud'}</button>
     </header>${trial}<main id="view"></main>`;
 }
@@ -49,7 +51,8 @@ async function render() {
   if (!state.user) return renderLogin(root, {});
   if (!state.org) return renderOnboarding(root, start);
 
-  const active = page === 'overblik' ? 'overview' : page === 'indstillinger' ? 'settings' : page === 'admin' && state.isAdmin ? 'admin' : 'inbox';
+  const active = page === 'overblik' ? 'overview' : page === 'indstillinger' ? 'settings' : page === 'admin' && state.isAdmin ? 'admin'
+    : page === 'indsigt' || page === 'rapport' ? 'insight' : 'inbox';
   mount(root, shell(active));
   root.querySelector('#signOut').addEventListener('click', async () => {
     if (state.demo) { location.href = location.pathname; return; }
@@ -60,6 +63,8 @@ async function render() {
   if (active === 'overview') return renderOverview(view);
   if (active === 'settings') return renderSettings(view, render);
   if (active === 'admin') return renderAdmin(view);
+  if (page === 'rapport') return renderReport(view, arg);
+  if (active === 'insight') return renderInsight(view);
   return renderInbox(view, page === 'anmeldelse' ? arg : page === 'ny' ? 'ny' : null);
 }
 
