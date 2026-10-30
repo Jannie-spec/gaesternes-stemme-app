@@ -1,0 +1,89 @@
+-- Opsætning: Gmails bekræftelseskoder, stedets navn fra mailen og valg af sted.
+
+-- Gmail sender en kode til Ekkoly-adressen, før den vil videresende. Vi gemmer koden,
+-- så hotellet kan se den i appen. Koderne er kun brugbare i kort tid og slettes efter 7 dage.
+create table public.forwarding_confirmations (
+  id           uuid primary key default gen_random_uuid(),
+  org_id       uuid not null references public.organizations(id) on delete cascade,
+  provider     text not null default 'gmail',
+  code         text,
+  confirm_url  text check (confirm_url is null or confirm_url ~ '^https://mail(-settings)?\.google\.com/'),
+  account      text,
+  received_at  timestamptz not null default now()
+);
+create index forwarding_confirmations_org_idx on public.forwarding_confirmations(org_id, received_at desc);
+alter table public.forwarding_confirmations enable row level security;
+grant select on public.forwarding_confirmations to authenticated;
+revoke all on public.forwarding_confirmations from anon;
+create policy forwarding_read on public.forwarding_confirmations for select
+  using (public.has_role(org_id, array['owner', 'manager']::public.member_role[]));
+
+create or replace function public.purge_forwarding_confirmations() returns void
+language sql security definer set search_path = public as $$
+  delete from public.forwarding_confirmations where received_at < now() - interval '7 days';
+$$;
+revoke all on function public.purge_forwarding_confirmations() from public, anon, authenticated;
+do $$
+begin
+  if exists (select 1 from pg_extension where extname = 'pg_cron') then
+    perform cron.unschedule(jobid) from cron.job where jobname = 'ekkoly-bekraeftelser-oprydning';
+    perform cron.schedule('ekkoly-bekraeftelser-oprydning', '17 3 * * *', 'select public.purge_forwarding_confirmations()');
+  end if;
+end $$;
+
+-- Stedets navn, som platformen skrev det, når Ekkoly ikke selv kunne finde stedet
+alter table public.reviews add column if not exists property_hint text;
+
+-- Visningen skal kende den nye kolonne (r.* låses, når visningen oprettes)
+drop view if exists public.review_queue;
+create view public.review_queue with (security_invoker = true) as
+select r.*,
+       p.name as property_name,
+       d.id   as draft_id,
+       d.body as draft_body,
+       d.status as draft_status,
+       d.origin as draft_origin,
+       (select count(*) from public.review_notes n where n.review_id = r.id) as note_count
+  from public.reviews r
+  left join public.properties p on p.id = r.property_id
+  left join lateral (
+    select * from public.reply_drafts x
+     where x.review_id = r.id and x.status in ('suggested', 'approved')
+     order by (x.status = 'approved') desc, x.created_at desc
+     limit 1
+  ) d on true;
+grant select on public.review_queue to authenticated;
+revoke all on public.review_queue from anon;
+
+-- Vælg sted på en anmeldelse. Med p_remember husker Ekkoly navnet fra mailen som ekstra
+-- navn på stedet, så næste anmeldelse kommer det rigtige sted hen (kun ledere).
+create or replace function public.set_review_property(p_review uuid, p_property uuid, p_remember boolean default false)
+returns void
+language plpgsql security definer set search_path = public as $$
+declare
+  v_org uuid;
+  v_hint text;
+begin
+  select org_id, property_hint into v_org, v_hint from public.reviews where id = p_review;
+  if v_org is null or not public.is_member(v_org) then
+    raise exception 'Ingen adgang';
+  end if;
+  if not exists (select 1 from public.properties where id = p_property and org_id = v_org and archived_at is null) then
+    raise exception 'Stedet findes ikke';
+  end if;
+  update public.reviews set property_id = p_property, property_hint = null where id = p_review;
+  if p_remember and v_hint is not null and length(trim(v_hint)) > 1
+     and public.has_role(v_org, array['owner', 'manager']::public.member_role[]) then
+    update public.properties
+       set aliases = array_append(coalesce(aliases, '{}'), trim(v_hint))
+     where id = p_property
+       and not (lower(trim(v_hint)) = any (select lower(a) from unnest(coalesce(aliases, '{}')) a))
+       and lower(trim(v_hint)) <> lower(name);
+    -- Andre anmeldelser med samme navn og uden sted får også stedet
+    update public.reviews set property_id = p_property, property_hint = null
+     where org_id = v_org and property_id is null and lower(trim(property_hint)) = lower(trim(v_hint));
+  end if;
+end;
+$$;
+revoke all on function public.set_review_property(uuid, uuid, boolean) from public, anon;
+grant execute on function public.set_review_property(uuid, uuid, boolean) to authenticated;
