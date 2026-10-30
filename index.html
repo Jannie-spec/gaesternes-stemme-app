@@ -14,7 +14,8 @@
 <link rel="apple-touch-icon" href="app/icon-180.png">
 <link rel="preload" href="app/fonts/public-sans-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="app/fonts/literata-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=20261030a">
+<link rel="preload" href="app/fonts/bricolage-grotesque-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css?v=20261030b">
 </head>
 <body>
 <a class="skip" href="#indhold">Gå til indhold</a>
@@ -36,10 +37,11 @@
 <section class="hero">
   <div class="wrap">
     <div class="hero-text">
-      <h1>Alle jeres anmeldelser ét sted. Svar, der lyder som jer.</h1>
+      <p class="kicker">Alle jeres anmeldelser ét sted</p>
+      <h1><span class="sr">Alle jeres anmeldelser ét sted. Svar, der lyder som jer.</span><span aria-hidden="true"><span class="strike">Standardsvar</span><span class="rest">Svar, der lyder som jer</span></span></h1>
       <p class="lead">Ekkoly samler anmeldelserne fra Google, Booking.com, Expedia, Airbnb, Tripadvisor og de andre. Hver anmeldelse får et svarforslag i jeres egen tone og på gæstens sprog. Kritik bliver liggende, til en leder har læst svaret.</p>
       <div class="actions">
-        <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
+        <a class="btn btn-primary arrow" href="app/?start#/">Prøv 14 dage gratis</a>
         <a class="btn btn-quiet" href="app/?demo#/">Se demoen</a>
       </div>
       <p class="fine">Uden kort og uden binding. Bagefter 595 kr. om måneden for første sted, ekskl. moms.</p>
@@ -113,10 +115,16 @@
   </div>
 </section>
 
-<section class="block" id="saadan">
+<div class="band" aria-label="Platforme Ekkoly samler anmeldelser fra">
+  <ul>
+    <li>Google</li><li>Booking.com</li><li>Expedia</li><li>Airbnb</li><li>Tripadvisor</li><li>Hostelworld</li><li>Vrbo</li>
+  </ul>
+</div>
+
+<section class="block block-foam" id="saadan">
   <div class="wrap">
-    <h2>Sådan kommer I i gang</h2>
-    <p class="intro">I opretter jer selv på få minutter. Der er intet at installere og intet opstartsmøde.</p>
+    <h2>I gang på <span class="hot">fem</span> minutter</h2>
+    <p class="intro">I opretter jer selv. Der er intet at installere og intet opstartsmøde.</p>
     <ol class="steps">
       <li>
         <h3>Opret jeres hotel</h3>
@@ -127,7 +135,7 @@
         <p>Kopiér en af jeres seneste anmeldelser ind, og læs svarforslaget med det samme.</p>
       </li>
       <li>
-        <h3>Lad resten komme af sig selv</h3>
+        <h3>Resten kommer af sig selv</h3>
         <p>Videresend platformenes anmeldelses-mails til jeres egen adresse hos os. Så lander nye anmeldelser i indbakken med et forslag klar.</p>
       </li>
     </ol>
@@ -136,7 +144,7 @@
 
 <section class="block" id="funktioner">
   <div class="wrap">
-    <h2>Det, der gør forskellen i en travl reception</h2>
+    <h2>Lavet til en <span class="hot">travl</span> reception</h2>
     <div class="features">
       <article class="feature">
         <div class="feature-text">
@@ -184,50 +192,50 @@
   </div>
 </section>
 
-<section class="block" id="platforme">
+<section class="block block-ink" id="platforme">
   <div class="wrap">
-    <h2>Platforme</h2>
+    <h2>Platform&shy;erne</h2>
     <p class="intro">Vi henter kun anmeldelser på lovlig vis: via platformens officielle adgang eller de mails, platformen selv sender jer. Vi logger aldrig ind i jeres konti.</p>
-    <table class="platforms">
-      <thead><tr><th scope="col">Platform</th><th scope="col">Anmeldelser kommer ind</th><th scope="col">Svar sendes</th></tr></thead>
-      <tbody>
-        <tr><td>Google</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>. Direkte fra Ekkoly, når Google har godkendt os</td></tr>
-        <tr><td>Booking.com</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
-        <tr><td>Expedia og Hotels.com</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
-        <tr><td>Airbnb</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
-        <tr><td>Tripadvisor</td><td>Via jeres anmeldelses-mails</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
-        <tr><td>Vrbo</td><td>Via jeres anmeldelses-mails</td><td>Vrbo viser i øjeblikket ikke værtens svar offentligt</td></tr>
-        <tr><td>Hostelworld, Agoda, HolidayCheck, Trip.com, Trustpilot</td><td>Sæt anmeldelsen ind i hånden. Mails kommer snart</td><td>Med <a href="knappen.html">Ekkoly-knappen</a>: svaret sættes ind, I trykker Send</td></tr>
-      </tbody>
-    </table>
-    <p class="note">Booking.com, Expedia, Airbnb og Tripadvisor lader kun store partnere sende svar automatisk. Med Ekkoly-knappen til Chrome åbner platformens svarside med svaret klar, og I trykker selv Send. Uden knappen kopierer Ekkoly svaret og åbner svarsiden. Vi arbejder på direkte adgang, og når en platform godkender os, skifter I uden at gøre noget.</p>
+    <ul class="menu">
+      <li><span class="name">Google</span><span class="how">Kommer ind via jeres anmeldelses-mails. Svar med Ekkoly-knappen, og direkte fra Ekkoly, når Google har godkendt os.</span><span class="tag">Knappen</span></li>
+      <li><span class="name">Booking.com</span><span class="how">Kommer ind via jeres anmeldelses-mails. Ekkoly-knappen sætter svaret ind, og I trykker Send.</span><span class="tag">Knappen</span></li>
+      <li><span class="name">Expedia og Hotels.com</span><span class="how">Kommer ind via jeres anmeldelses-mails. Ekkoly-knappen sætter svaret ind, og I trykker Send.</span><span class="tag">Knappen</span></li>
+      <li><span class="name">Airbnb</span><span class="how">Kommer ind via jeres anmeldelses-mails. Ekkoly-knappen sætter svaret ind, og I trykker Send.</span><span class="tag">Knappen</span></li>
+      <li><span class="name">Tripadvisor</span><span class="how">Kommer ind via jeres anmeldelses-mails. Ekkoly-knappen sætter svaret ind, og I trykker Send.</span><span class="tag">Knappen</span></li>
+      <li><span class="name">Vrbo</span><span class="how">Kommer ind via jeres anmeldelses-mails. Vrbo viser i øjeblikket ikke værtens svar offentligt.</span><span class="tag">Kun læs</span></li>
+      <li><span class="name">Hostelworld, Agoda og flere</span><span class="how">HolidayCheck, Trip.com og Trustpilot også. Sæt anmeldelsen ind i hånden, mails kommer snart. Ekkoly-knappen sætter svaret ind.</span><span class="tag">Knappen</span></li>
+    </ul>
+    <p class="note">Booking.com, Expedia, Airbnb og Tripadvisor lader kun store partnere sende svar automatisk. Med <a href="knappen.html">Ekkoly-knappen til Chrome</a> åbner platformens svarside med svaret klar, og I trykker selv Send. Uden knappen kopierer Ekkoly svaret og åbner svarsiden. Når en platform godkender os til direkte adgang, skifter I uden at gøre noget.</p>
   </div>
 </section>
 
 <section class="origin">
   <div class="wrap">
     <div class="origin-text">
-      <h2>Hvorfor jeg byggede Ekkoly</h2>
+      <h2>Bygget af en hotelejer <span class="on-ink">på Bornholm</span></h2>
       <p>Jeg hedder Jannie Buch Thorborg. Sammen med Martin Buch Thorborg ejer og driver jeg Klippen Hotel i Gudhjem på Bornholm. Siden 2020 har vi overtaget og sat stederne i stand ét for ét, og i dag har vi tre hoteller, et hostel, en bar og et feriehus.</p>
       <p>Hos os tager jeg mig af den digitale side. For hvert nyt sted kom der flere anmeldelser på flere platforme, og det blev en daglig opgave bare at finde dem. De gode anmeldelser fik for sjældent et svar, og de kritiske fortjente mere omtanke, end der var tid til i en travl reception.</p>
       <p>Derfor byggede jeg et værktøj til os selv. Det samler alle anmeldelser, skriver svarforslag i vores egen tone og sørger for, at en leder ser kritikken, før der bliver svaret. Vi bruger det hver dag, og nu kan andre steder også få det.</p>
       <p class="signature">Jannie Buch Thorborg<span>Medejer, Klippen Hotel, Gudhjem</span></p>
     </div>
-    <ul class="places" aria-label="Klippens steder, der bruger Ekkoly">
-      <li><span>Grevens Dal</span> hotel, siden 2021</li>
-      <li><span>Therns Hotel</span> hotel, siden 2022</li>
-      <li><span>Therns Hostel</span> hostel, siden 2022</li>
-      <li><span>Skt. Jørgens Gaard</span> hotel, siden 2025</li>
-      <li><span>Jylkat</span> bar</li>
-      <li><span>Det Gamle Bryggeri</span> feriehus</li>
-    </ul>
+    <div class="origin-side">
+      <svg class="mascot" viewBox="0 0 72 64" aria-hidden="true"><g fill="none" stroke="#12304a" stroke-linecap="round" stroke-width="2.4"><path d="M56 10.5a8 8 0 0 1 5 6.5"/><path d="M58.5 5a14 14 0 0 1 8.5 11.5" opacity=".6"/></g><g transform="translate(0 2)"><path d="M27 34C20 27 10 26 3 31c2.6 2.4 3.6 5.6 3 9 3-1.4 6.2-1.2 8.6.8-.5 2.6.2 5 2 6.8 1.8-1.7 4.4-2.3 7-1.6L27 42z" fill="#5e4f5c"/><path d="M45 34c7-7 17-8 24-3-2.6 2.4-3.6 5.6-3 9-3-1.4-6.2-1.2-8.6.8.5 2.6-.2 5-2 6.8-1.8-1.7-4.4-2.3-7-1.6L45 42z" fill="#5e4f5c"/><path d="M23.5 29.5 21 13.5q.4-2.2 2.3-1l9 11.5zM48.5 29.5 51 13.5q-.4-2.2-2.3-1l-9 11.5z" fill="#7d6c78" stroke="#7d6c78" stroke-width="3" stroke-linejoin="round"/><path d="M24.8 25.5 23.6 17.2l4.6 6zM47.2 25.5l1.2-8.3-4.6 6z" fill="#e9b9b0" stroke="#e9b9b0" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="36" cy="40.5" rx="17" ry="17.5" fill="#7d6c78"/><ellipse cx="36" cy="47.5" rx="9.5" ry="8.5" fill="#f3e8dc"/><ellipse cx="26.5" cy="49" rx="3.6" ry="2.6" transform="rotate(-30 26.5 49)" fill="#5e4f5c"/><ellipse cx="45.5" cy="49" rx="3.6" ry="2.6" transform="rotate(30 45.5 49)" fill="#5e4f5c"/><ellipse cx="30.5" cy="36" rx="2" ry="2.5" fill="#2a2230"/><ellipse cx="41.5" cy="36" rx="2" ry="2.5" fill="#2a2230"/><circle cx="26.6" cy="40.2" r="2.4" fill="#e7958c" opacity=".75"/><circle cx="45.4" cy="40.2" r="2.4" fill="#e7958c" opacity=".75"/><path d="M33.8 39.8q2.2 2 4.4 0" fill="none" stroke="#2a2230" stroke-width="1.4" stroke-linecap="round"/><path d="M34.6 40.6l.5 1.4.6-1.1M37.4 40.6l-.5 1.4-.6-1.1" fill="#f3e8dc"/></g></svg>
+      <ul class="places" aria-label="Klippens steder, der bruger Ekkoly">
+        <li><span>Grevens Dal</span> hotel, siden 2021</li>
+        <li><span>Therns Hotel</span> hotel, siden 2022</li>
+        <li><span>Therns Hostel</span> hostel, siden 2022</li>
+        <li><span>Skt. Jørgens Gaard</span> hotel, siden 2025</li>
+        <li><span>Jylkat</span> bar</li>
+        <li><span>Det Gamle Bryggeri</span> feriehus</li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <section class="block" id="pris">
   <div class="wrap price">
-    <div class="price-main">
-      <h2>Én pris, alt med</h2>
+    <div class="price-card">
+      <h2>Én pris, <span class="hot">alt</span> med</h2>
       <p class="amount">595 kr. <span>om måneden for første sted</span></p>
       <p class="sub">395 kr. om måneden for hvert ekstra sted. Priser ekskl. moms.</p>
       <ul class="included">
@@ -238,17 +246,17 @@
         <li>Spørg jeres anmeldelser og månedsrapport</li>
         <li>Database i EU (Frankfurt)</li>
       </ul>
-      <a class="btn btn-primary" href="app/?start#/">Start 14 dages gratis prøve</a>
+      <a class="btn btn-primary arrow" href="app/?start#/">Prøv 14 dage gratis</a>
     </div>
     <dl class="terms">
       <div><dt>Ingen binding</dt><dd>Abonnementet løber en måned ad gangen. Stopper I, beholder I adgangen måneden ud.</dd></div>
-      <div><dt>Ingen kort i prøveperioden</dt><dd>Når de 14 dage er gået, vælger I selv, om I vil fortsætte. Gør I ikke, bliver der ikke trukket noget, og jeres data slettes efter 90 dage.</dd></div>
+      <div><dt>Intet kort i prøven</dt><dd>Når de 14 dage er gået, vælger I selv, om I vil fortsætte. Gør I ikke, bliver der ikke trukket noget, og jeres data slettes efter 90 dage.</dd></div>
       <div><dt>Pilothoteller</dt><dd>De første 10 hoteller betaler 300 kr. om måneden i tre måneder mod at fortælle os, hvad der virker, og hvad der mangler.</dd></div>
     </dl>
   </div>
 </section>
 
-<section class="block" id="spoergsmaal">
+<section class="block block-foam" id="spoergsmaal">
   <div class="wrap">
     <h2>Spørgsmål</h2>
     <div class="faq">
@@ -282,11 +290,11 @@
 
 <section class="closing">
   <div class="wrap">
-    <h2>Se jeres første svarforslag om fem minutter</h2>
-    <p>Opret jer, sæt en af jeres seneste anmeldelser ind, og læs svaret. Ingen kort, ingen binding.</p>
+    <h2>Jeres første svar om <span class="hot">fem</span> minutter</h2>
+    <p>Opret jer, sæt en af jeres seneste anmeldelser ind, og læs svaret. Intet kort, ingen binding.</p>
     <div class="actions">
-      <a class="btn btn-light" href="app/?start#/">Start 14 dages gratis prøve</a>
-      <a class="btn btn-ghost" href="app/?demo#/">Se demoen</a>
+      <a class="btn btn-ink arrow" href="app/?start#/">Prøv 14 dage gratis</a>
+      <a class="btn btn-quiet" href="app/?demo#/">Se demoen</a>
     </div>
   </div>
 </section>
