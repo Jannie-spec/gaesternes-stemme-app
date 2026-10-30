@@ -525,3 +525,27 @@ input:focus, select:focus, textarea:focus { border-color: var(--ink); outline: 3
 .logo .echo { color: var(--coral); opacity: 1; }
 .logo-mark { --logo-bg: #12304a; --logo-echo: #acd9d5; }
 @media print { .panel, .letter, .kpis div { box-shadow: none !important; } }
+
+/* Enkel udgave: ingen skygger, tynde kanter, papir i toppen. Plakatskriften kun til overskrifter og knapper. */
+:root { --hard: none; }
+.top { background: var(--paper); border-bottom: 2px solid var(--ink); }
+.top nav a { font: 600 15px/1 var(--sans); text-transform: none; letter-spacing: 0; padding: 9px 12px; }
+.panel, .letter, .new-review, .entry-card, .admin-org, .getting-started { box-shadow: none; border-width: 2px; }
+.kpis div, .admin-stats div { border-width: 2px; }
+.empty-state, .detail-empty { border-width: 2px; }
+.primary, .secondary, .button { border-width: 2px; }
+.primary:hover, .secondary:hover, .button:hover { transform: none; box-shadow: none; }
+.primary:hover, .button:hover { background: color-mix(in srgb, var(--coral) 88%, #000); }
+.secondary:hover { background: var(--paper); }
+.chip { border-width: 1.5px; font-weight: 500; }
+.items { border-top-width: 2px; }
+.reply { border-left-width: 2px; }
+.removal { border-width: 2px; border-left-width: 6px; }
+.scores thead th { border-bottom-width: 2px; }
+.page-title { font-size: clamp(36px, 4vw, 52px); }
+.panel h2, .new-review h2, .admin-head h2, .report h2, .empty-state h2 { font-size: 26px; }
+.group h2, .reply h2, .notes h2, .removal h2, .getting-started h2, .competitor-block h3, .topic-cols h3 { font-size: 19px; }
+.entry { background: var(--paper); }
+.entry-card { border-width: 2px; }
+.toast { box-shadow: none; border-width: 2px; }
+.demo-bar { border-bottom: 0; }
