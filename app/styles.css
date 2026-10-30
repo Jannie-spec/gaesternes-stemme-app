@@ -403,3 +403,125 @@ main { max-width: 1280px; margin: 0 auto; padding-block: 24px 64px; padding-left
 
 .logo-mark { width: 30px; height: 30px; flex: none; margin-right: 10px; --logo-bg: #1d5a73; --logo-fg: #fff; --logo-echo: #86b9d3; }
 .brand, .mark, .mark a { display: inline-flex; align-items: center; text-decoration: none; }
+
+/* =====================================================================
+   Plakatstil (samme som websitet): papir, dybt hav, havskum og koral.
+   Overskrifter, knapper og menu i Bricolage Grotesque med versaler,
+   tykke blæk-kanter og hårde skygger. Gæstens ord står stadig i Literata.
+   ===================================================================== */
+@font-face { font-family: 'Bricolage'; font-weight: 200 800; font-stretch: 75% 100%; font-display: swap; src: url(fonts/bricolage-grotesque-latin-standard-normal.woff2) format('woff2'); }
+:root {
+  --paper: #f5eddd; --surface: #fffaf0; --ink: #12304a; --muted: #3e5669;
+  --line: #d9cfbc; --line-strong: #12304a;
+  --harbour: #12304a; --harbour-hover: #0a2236; --harbour-soft: #dcefec; --on-accent: #f5eddd;
+  --foam: #acd9d5; --coral: #ec6a43; --coral-ink: #12304a;
+  --praise: #2c6a4b; --mixed: #85560c; --critique: #9a2f2a; --critique-soft: #f9e0d8;
+  --chrome: #12304a; --chrome-fg: #f5eddd; --chrome-line: #5f7a8c; --shadow: rgba(18, 48, 74, .3);
+  --display: 'Bricolage', 'Arial Narrow', Impact, sans-serif;
+  --edge: 3px; --hard: 5px 5px 0 var(--ink);
+  --radius: 0px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f2233; --surface: #16304a; --ink: #f5eddd; --muted: #b9c8cf; --line: #2b4a63; --line-strong: #f5eddd;
+    --harbour: #acd9d5; --harbour-hover: #c8e8e5; --harbour-soft: #1d4552; --on-accent: #0f2233;
+    --foam: #1d4552; --coral: #f07a55; --coral-ink: #0f2233;
+    --praise: #8fd0aa; --mixed: #ecc070; --critique: #f2a08f; --critique-soft: #3d2420;
+    --chrome: #081624; --chrome-fg: #f5eddd; --chrome-line: #3e5669; --hard: 5px 5px 0 #000;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f2233; --surface: #16304a; --ink: #f5eddd; --muted: #b9c8cf; --line: #2b4a63; --line-strong: #f5eddd;
+  --harbour: #acd9d5; --harbour-hover: #c8e8e5; --harbour-soft: #1d4552; --on-accent: #0f2233;
+  --foam: #1d4552; --coral: #f07a55; --coral-ink: #0f2233;
+  --praise: #8fd0aa; --mixed: #ecc070; --critique: #f2a08f; --critique-soft: #3d2420;
+  --chrome: #081624; --chrome-fg: #f5eddd; --chrome-line: #3e5669; --hard: 5px 5px 0 #000;
+}
+a { color: var(--ink); text-decoration-thickness: 2px; text-decoration-color: var(--coral); }
+:focus-visible { outline-color: var(--coral); }
+
+/* Plakatskriften til overskrifter */
+.page-title, .entry-card h1, .panel h2, .empty-state h2, .new-review h2, .admin-head h2, .report-head h1, .report h2,
+.detail-empty strong, .group h2, .reply h2, .notes h2, .removal h2, .getting-started h2, .competitor-block h3, .topic-cols h3 {
+  font-family: var(--display); font-weight: 800; font-stretch: 75%; text-transform: uppercase; letter-spacing: 0; line-height: .95;
+}
+.page-title { font-size: clamp(40px, 5vw, 64px); margin-bottom: 18px; }
+.entry-card h1, .report-head h1 { font-size: clamp(38px, 5vw, 52px); }
+.panel h2, .new-review h2, .admin-head h2, .report h2 { font-size: 30px; margin-bottom: 12px; }
+.empty-state h2 { font-size: 30px; }
+.group h2, .reply h2, .notes h2, .removal h2, .getting-started h2, .competitor-block h3, .topic-cols h3 { font-size: 21px; }
+.kpis dd, .admin-stats dd { font: 800 46px/1 var(--display); font-stretch: 75%; color: var(--coral); }
+.mini-kpis strong { color: var(--coral); }
+
+/* Knapper */
+.primary, .secondary, .button {
+  border-radius: 0; border: var(--edge) solid var(--ink); min-height: 46px; padding: 0 20px;
+  font: 800 18px/1 var(--display); font-stretch: 75%; text-transform: uppercase; letter-spacing: .02em;
+  transition: transform .12s, box-shadow .12s;
+}
+.primary, .button { background: var(--coral); color: var(--coral-ink); }
+.primary:hover, .button:hover { background: var(--coral); transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+.secondary { background: var(--surface); color: var(--ink); }
+.secondary:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+@media (prefers-reduced-motion: reduce) { .primary:hover, .secondary:hover, .button:hover { transform: none; } }
+.link { color: var(--ink); text-decoration-color: var(--coral); text-decoration-thickness: 2px; }
+
+/* Felter */
+input:not([type=checkbox]), select, textarea { border: 2px solid var(--ink); border-radius: 0; background: var(--surface); }
+input:focus, select:focus, textarea:focus { border-color: var(--ink); outline: 3px solid var(--coral); outline-offset: 0; }
+.check input { accent-color: var(--coral); }
+
+/* Ramme */
+.top { background: var(--foam); border-bottom: var(--edge) solid var(--ink); }
+.top nav a { border-radius: 0; font: 800 18px/1 var(--display); font-stretch: 75%; text-transform: uppercase; letter-spacing: .02em; padding: 10px 12px; }
+.top nav a:hover { background: var(--surface); }
+.top nav a[aria-current=page] { background: var(--ink); color: var(--paper); }
+.org { border-left: 2px solid var(--ink); color: var(--ink); font-weight: 500; }
+.demo-bar { border-bottom: var(--edge) solid var(--ink); }
+
+/* Kort og flader: tyk kant og hård skygge */
+.panel, .letter, .new-review, .entry-card, .admin-org, .getting-started {
+  border: var(--edge) solid var(--ink); border-radius: 0; box-shadow: var(--hard);
+}
+.panel, .new-review, .getting-started { margin-bottom: 22px; }
+.kpis div, .admin-stats div { border: var(--edge) solid var(--ink); border-radius: 0; }
+.empty-state, .detail-empty { border: var(--edge) dashed var(--ink); border-radius: 0; }
+.entry { background: var(--foam); }
+.lead, .aside { color: var(--muted); }
+.aside { border-top: 2px solid var(--ink); }
+.sent { background: var(--harbour-soft); border: 2px solid var(--ink); border-radius: 0; }
+
+/* Indbakken */
+.chip { border: 2px solid var(--ink); border-radius: 0; background: var(--surface); color: var(--ink); font-weight: 600; }
+.chip[aria-pressed=true] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.chip:hover { background: var(--foam); }
+.items { border-top: var(--edge) solid var(--ink); }
+.item { border-bottom: 1px solid var(--line); border-left: 5px solid transparent; }
+.item.is-selected { background: var(--surface); border-left-color: var(--coral); }
+.item-who strong, .item-who > span:first-child { font-weight: 600; }
+.group summary h2::after { color: var(--ink); text-decoration-color: var(--coral); font: 600 14px var(--sans); text-transform: none; }
+.reply { border-left: var(--edge) solid var(--ink); }
+.reply.hold { border-left-color: var(--critique); }
+.reply textarea[readonly] { background: var(--harbour-soft); border-color: var(--ink); }
+.removal { border: var(--edge) solid var(--ink); border-left-width: 8px; border-left-color: var(--coral); border-radius: 0; }
+.topic { border-radius: 0; border: 2px solid currentColor; font-weight: 500; }
+.topic-neg { border-color: currentColor; }
+.address code { border-radius: 0; border: 2px solid var(--ink); background: var(--harbour-soft); }
+.admin-status { border-radius: 0; border-width: 2px; }
+.topic-bars .bar { border-radius: 0; height: 12px; }
+.key { border-radius: 0; }
+.scores thead th { color: var(--ink); font: 800 15px/1.1 var(--display); font-stretch: 75%; text-transform: uppercase; letter-spacing: .02em; border-bottom: 2px solid var(--ink); }
+.scores tr.own th, .scores tr.own td { background: var(--harbour-soft); }
+.spark-line { stroke: var(--coral); stroke-width: 2.5; }
+.spark-end { fill: var(--coral); }
+.ask-answer { border-left: var(--edge) solid var(--coral); }
+.report-quotes blockquote { border-radius: 0; border: 2px solid var(--ink); border-left-width: 6px; }
+.report-head .eyebrow { color: var(--ink); font-weight: 600; }
+.toast { border-radius: 0; border: var(--edge) solid var(--ink); box-shadow: var(--hard); }
+.toast-error { background: var(--critique); color: #fff; }
+
+/* Logo i plakatstil */
+.logo { font: 800 28px/1 var(--display); font-stretch: 75%; letter-spacing: 0; color: var(--ink); }
+.logo .echo { color: var(--coral); opacity: 1; }
+.logo-mark { --logo-bg: #12304a; --logo-echo: #acd9d5; }
+@media print { .panel, .letter, .kpis div { box-shadow: none !important; } }
