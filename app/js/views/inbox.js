@@ -98,7 +98,7 @@ export async function renderInbox(view, selectedId) {
       ${section('Venter på en leder', leader ? 'Gæsten kritiserer noget. Læs svaret igennem og godkend det.' : 'Gæsten kritiserer noget, så en leder godkender svaret først.', g.waiting, selectedId)}
       ${g.hold.length ? section('Svar ikke endnu', 'Vi prøver at få anmeldelsen fjernet. Et svar kan gøre det sværere.', g.hold, selectedId) : ''}
       ${section('Besvaret', '', g.done, selectedId, false)}
-      ${!state.queue.length ? html`<div class="empty-state"><h2>Ingen anmeldelser endnu</h2><p>Kopiér en af jeres seneste anmeldelser fra Booking.com, Google eller en anden platform, og se svarforslaget med det samme. Når videresendelsen er sat op, kommer de nye ind af sig selv.</p><div class="actions"><a class="button" href="#/ny">Sæt en anmeldelse ind</a><a class="secondary" href="#/indstillinger">Sæt videresendelse op</a></div></div>` : ''}
+      ${!state.queue.length ? html`<div class="empty-state"><h2>Ingen anmeldelser endnu</h2><p>Kopiér en af jeres seneste anmeldelser fra Booking.com, Google eller en anden platform, og se svarforslaget med det samme. Når videresendelsen er sat op, kommer de nye ind af sig selv.</p><div class="actions"><a class="button" href="#/ny">Sæt en anmeldelse ind</a><a class="secondary" href="#/opsaetning">Sæt videresendelse op</a></div></div>` : ''}
     </div>
     <div class="detail-pane" id="detail">${selectedId ? html`<p class="loading">Henter anmeldelsen</p>` : html`<div class="detail-empty"><p>Vælg en anmeldelse for at se den og svarforslaget.</p></div>`}</div>
   </div>`);
@@ -132,6 +132,12 @@ async function renderDetail(el, id, view) {
 
   const letter = html`<article class="letter">
     <p class="letter-meta">${r.property_name || 'Sted ikke valgt'}, ${platformName(r.platform)}${r.published_at ? html`, ${date(r.published_at)}` : ''}${lang ? html`, skrevet på ${lang}` : ''}</p>
+    ${!r.property_id && state.properties.length > 1 ? html`<form class="place-pick" id="placePick">
+      <label class="field"><span>Hvilket sted er anmeldelsen til?${r.property_hint ? html` <small>${platformName(r.platform)} skriver "${r.property_hint}".</small>` : ''}</span>
+        <select name="place" required><option value="">Vælg sted</option>${state.properties.map((p) => html`<option value="${p.id}">${p.name}</option>`)}</select></label>
+      ${leader && r.property_hint ? html`<label class="check"><input type="checkbox" name="remember" checked><span>Husk det til næste gang<small>Ekkoly lægger fremover anmeldelser til "${r.property_hint}" på det valgte sted.</small></span></label>` : ''}
+      <button type="submit" class="secondary">Gem sted</button>
+    </form>` : ''}
     ${r.title ? html`<h2 class="letter-title">${r.title}</h2>` : ''}
     <blockquote class="letter-body">${r.body ? r.body.split('\n').filter(Boolean).map((p) => html`<p>${p}</p>`) : html`<p class="muted">Gæsten gav kun en karakter.</p>`}</blockquote>
     <p class="letter-sign"><span>${r.author || 'Gæst'}</span>${scoreMark(r)}</p>
@@ -195,6 +201,15 @@ async function renderDetail(el, id, view) {
     if (r.draft_id && text === (r.draft_body ?? '').trim()) return r.draft_id;
     return (await state.api.ownDraft(state.org.id, r.id, text)).id;
   };
+
+  el.querySelector('#placePick')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = e.target;
+    busy(f.querySelector('button'), async () => {
+      await state.api.setReviewProperty(r.id, f.place.value, Boolean(f.remember?.checked));
+      await refresh(f.remember?.checked ? 'Stedet er gemt, og Ekkoly husker det til næste gang.' : 'Stedet er gemt.');
+    });
+  });
 
   el.querySelector('#regen')?.addEventListener('click', (e) => {
     e.target.textContent = 'Skriver forslag';
@@ -266,7 +281,7 @@ async function gettingStarted(el) {
     { done: state.queue.length > 0, text: 'Sæt jeres seneste anmeldelse ind, og se svarforslaget', href: '#/ny' },
     { done: tone.length >= 3, text: 'Sæt 3 af jeres egne svar ind, så forslagene lyder som jer', href: '#/indstillinger#replies' },
     ...(GOOGLE_DIRECT ? [{ done: connections.some((c) => c.provider === 'google'), text: 'Forbind Google', href: '#/indstillinger#google' }] : []),
-    { done: state.queue.some((r) => r.source === 'email'), text: 'Videresend anmeldelses-mails fra Google, Booking.com og de andre', href: '#/indstillinger#mail' },
+    { done: state.queue.some((r) => r.source === 'email'), text: 'Få anmeldelserne til at komme ind af sig selv', href: '#/opsaetning' },
     { done: members.length > 1, text: 'Invitér en kollega', href: '#/indstillinger#team' },
   ];
   const left = steps.filter((s) => !s.done).length;

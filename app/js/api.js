@@ -139,5 +139,8 @@ export const api = {
   ask: (orgId, question, propertyId, days) => fn('ask', { org_id: orgId, question, property_id: propertyId, days }),
 
   async snapshots(orgId) { const c = await client(); return must(await c.from('score_snapshots').select('*').eq('org_id', orgId).order('observed_at')); },
+  async forwardingConfirmations(orgId) { const c = await client(); return must(await c.from('forwarding_confirmations').select('code, confirm_url, account, received_at').eq('org_id', orgId).order('received_at', { ascending: false }).limit(3)); },
+  async platformStatus(orgId) { const c = await client(); return must(await c.from('inbound_emails').select('platform, received_at').eq('org_id', orgId).eq('status', 'parsed').order('received_at', { ascending: false }).limit(500)); },
+  async setReviewProperty(reviewId, propertyId, remember) { const c = await client(); return must(await c.rpc('set_review_property', { p_review: reviewId, p_property: propertyId, p_remember: remember })); },
   async inbound(orgId) { const c = await client(); return must(await c.from('inbound_emails').select('id, from_address, subject, received_at, status, platform, error').eq('org_id', orgId).order('received_at', { ascending: false }).limit(10)); },
 };

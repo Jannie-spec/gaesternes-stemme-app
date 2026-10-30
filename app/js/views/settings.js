@@ -1,6 +1,5 @@
 import { GOOGLE_DIRECT, INBOUND_MAIL_DOMAIN } from '../../config.js';
 import { isLeader, loadOrgData, state } from '../state.js';
-import { FORWARD_GUIDE } from '../platforms.js';
 import { busy, copy, date, html, mount, toast, when } from '../ui.js';
 
 const ROLE = { owner: 'Ejer', manager: 'Leder', staff: 'Medarbejder' };
@@ -36,7 +35,7 @@ export async function renderSettings(view, rerender) {
     <p>Platformene sender en mail, hver gang en gæst skriver en anmeldelse. Send de mails videre hertil, så kommer anmeldelserne ind af sig selv.</p>
     ${address ? html`<div class="address"><code>${address}</code><button type="button" class="secondary" id="copyAddress">Kopiér adressen</button></div>`
       : html`<p class="hint">Jeres adresse bliver klar, når maildomænet er sat op. Indtil da kan I sætte anmeldelser ind i hånden under I dag.</p>`}
-    <dl class="guide">${FORWARD_GUIDE.map(([title, text]) => html`<dt>${title}</dt><dd>${text}</dd>`)}</dl>
+    ${leader ? html`<p><a class="button" href="#/opsaetning">Åbn guiden til opsætning</a></p>` : ''}
     ${leader ? html`<h3>Seneste mails</h3>${inbound.length
       ? html`<ul class="log">${inbound.map((m) => html`<li><span>${m.subject || '(intet emne)'}</span><span class="muted">${when(m.received_at)}, ${STATUS[m.status] ?? m.status}${m.error ? `: ${m.error}` : ''}</span></li>`)}</ul>`
       : html`<p class="hint">Ingen mails modtaget endnu.</p>`}` : ''}

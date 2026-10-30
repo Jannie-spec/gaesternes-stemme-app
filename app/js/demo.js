@@ -53,6 +53,8 @@ const reviews = [
   R({ property_id: 'p1', platform: 'booking', author: 'Gæst', rating: 7, scale: 10, published_at: day(9), reply_status: 'not_needed', needs_approval: true, body: null }),
   R({ property_id: 'p2', platform: 'vrbo', author: 'Thomas & Ida', rating: 4, scale: 5, published_at: day(12), reply_status: 'posted', needs_approval: false,
       body: 'Hyggelig hytte og fin beliggenhed. Wifi var lidt ustabilt.', owner_reply: 'Tak for jeres ophold og for tippet om wifi. Vi har sat en ny router op i hytterne. Mange hilsner fra Havblik Hytter', owner_reply_at: day(11) }),
+  R({ property_id: null, property_hint: 'Havblik Strandhotel', platform: 'expedia', author: 'Jonas', rating: 8, scale: 10, published_at: day(1), reply_status: 'unanswered', needs_approval: false,
+      title: 'Dejligt', body: null }),
 ];
 
 const DRAFTS = {
@@ -220,6 +222,15 @@ export const demo = {
   async openPortal() { throw new Error('Findes ikke i prøveversionen.'); },
   async syncPlaces() { return wait({ ok: true }); },
   async snapshots() { return wait(snapshots); },
+  async forwardingConfirmations() { return wait([{ code: '634197258', confirm_url: 'https://mail-settings.google.com/mail/vf-demo', account: 'reception@havblik.dk', received_at: new Date(Date.now() - 4 * 60e3).toISOString() }]); },
+  async platformStatus() { return wait([{ platform: 'booking', received_at: day(1) }, { platform: 'expedia', received_at: day(1) }, { platform: 'airbnb', received_at: day(2) }, { platform: 'vrbo', received_at: day(12) }]); },
+  async setReviewProperty(rid, pid, remember) {
+    const r = reviews.find((x) => x.id === rid);
+    const prop = PROPS.find((x) => x.id === pid);
+    if (remember && r.property_hint && !prop.aliases?.includes(r.property_hint)) prop.aliases = [...(prop.aliases ?? []), r.property_hint];
+    Object.assign(r, { property_id: pid, property_name: prop.name, property_hint: null });
+    return wait(null);
+  },
   async inbound() {
     return wait([
       { id: id(), from_address: 'Booking.com <noreply@booking.com>', subject: 'Du har modtaget en ny gæsteanmeldelse', received_at: day(1), status: 'parsed', platform: 'booking' },

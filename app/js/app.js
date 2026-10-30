@@ -11,6 +11,7 @@ import { renderInvite } from './views/invite.js';
 import { renderAdmin } from './views/admin.js';
 import { renderInsight } from './views/insight.js';
 import { renderReport } from './views/report.js';
+import { renderSetup } from './views/setup.js';
 
 const root = document.querySelector('#app');
 
@@ -51,7 +52,7 @@ async function render() {
   if (!state.user) return renderLogin(root, {});
   if (!state.org) return renderOnboarding(root, start);
 
-  const active = page === 'overblik' ? 'overview' : page === 'indstillinger' ? 'settings' : page === 'admin' && state.isAdmin ? 'admin'
+  const active = page === 'overblik' ? 'overview' : page === 'indstillinger' || page === 'opsaetning' ? 'settings' : page === 'admin' && state.isAdmin ? 'admin'
     : page === 'indsigt' || page === 'rapport' ? 'insight' : 'inbox';
   mount(root, shell(active));
   root.querySelector('#signOut').addEventListener('click', async () => {
@@ -61,6 +62,7 @@ async function render() {
   root.querySelector('#demoRole')?.addEventListener('change', (e) => { demo.switchRole(e.target.value); state.role = e.target.value; render(); });
   const view = root.querySelector('#view');
   if (active === 'overview') return renderOverview(view);
+  if (page === 'opsaetning') return renderSetup(view);
   if (active === 'settings') return renderSettings(view, render);
   if (active === 'admin') return renderAdmin(view);
   if (page === 'rapport') return renderReport(view, arg);
