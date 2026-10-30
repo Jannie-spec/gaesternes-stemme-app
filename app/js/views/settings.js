@@ -25,7 +25,7 @@ export async function renderSettings(view, rerender) {
     state.api.billing(state.org.id).catch(() => null),
   ]);
   const google = connections.find((c) => c.provider === 'google');
-  const address = INBOUND_MAIL_DOMAIN ? `${state.org.inbound_token}@${INBOUND_MAIL_DOMAIN}` : (state.demo ? `${state.org.inbound_token}@ind.ekkoly.com` : '');
+  const address = INBOUND_MAIL_DOMAIN ? `${state.org.inbound_token}@${INBOUND_MAIL_DOMAIN}` : (state.demo ? `${state.org.inbound_token}@ekkoly.com` : '');
   const googleProfiles = state.profiles.filter((p) => p.platform === 'google' && p.connection === 'api');
 
   mount(view, html`<h1 class="page-title">Indstillinger</h1>
